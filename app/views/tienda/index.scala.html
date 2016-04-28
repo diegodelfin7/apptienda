@@ -1,0 +1,86 @@
+@(message: String,cliente: Cliente)
+@import views.html.tienda.template
+@template(message,cliente){
+    <style>
+        .dfa-banner {
+            position: relative;
+        }
+        a.home-cta {
+            background: rgba(255, 255, 255, 0.7);
+            opacity:0;
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+        .home-cta span {
+            background: #4386A1;
+            border-radius: 3px;
+            color: #FFFFFF;
+            font: 14px function-pro;
+            left: 32%;
+            padding: 6px;
+            position: absolute;
+            text-align: center;
+            text-decoration: none;
+            text-transform: uppercase;
+            top: 42%;
+            width: 96px;
+        }
+    </style>
+}{
+    <div id="b1">
+        <div id="b1_1">
+
+        </div>
+    </div>
+    <div>
+        <div class="dfa-banner" style="width: 290px; height: 195px;">
+            <img height="195" src="/assets/promociones/20150225-bt4-tecno-gocamaras.jpg" width="290">
+            <a class="home-cta" href="/categoria/camaras-digitales">
+                <span>Compra ya</span>
+            </a></div>
+    </div>
+    <script>
+        imgb1=["VH-1-200215.jpg","VH-2-200215.jpg","VH-rosen-120215.jpg","VH-4-190215.jpg","VH-5-200215.jpg"]
+        w=365*2
+        h=186*2
+        for(var i in imgb1){
+            $("#b1_1").append('<div><a><img src="/assets/promociones/'+imgb1[i]+'">'+'</a></div>')
+        }
+        $("#b1_1 div:nth-child(1) img").click(function(){
+            location.href="/categoria/televisores"
+        })
+        $("#b1").css({width:w,height:h,overflow:"hidden","margin-top": "30px"})
+        $("#b1_1").css({width:w*5,height:h,"transform":"translateX(0px)"})
+        $("#b1_1>div").css({float:"left"})
+        $("#b1_1 img").prop({width:w,height:h})
+        var index=1
+        setInterval(function(){
+            $("#b1_1").css({"transform":"translateX(-"+index*w+"px)","transition-duration":"0.5s"})
+            if(Transform($("#b1_1"))[4]<-w*3){
+                $("#b1_1").css({"transform":"translateX(-0px)","transition-duration":"0s"})
+                index=0;
+            }
+            index++;
+        },4000)
+        function Transform(elem){
+            return matrixToArray($(elem).css("transform"))
+        }
+        function webkitTrans(elem){
+            return matrixToArray($(elem).css("-webkit-transform"))
+        }
+        function mozTrans(elem){
+            return matrixToArray($(elem).css("-moz-transform"))
+        }
+        function matrixToArray(str){
+            return str.split('(')[1].split(')')[0].split(',');
+        }
+        $(".dfa-banner").hover(function(){
+            $(".home-cta").animate({opacity:1},400)
+        },function(){
+            $(".home-cta").animate({opacity:0},300)
+        })
+    </script>
+}

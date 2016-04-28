@@ -1,0 +1,94 @@
+@main("Login"){
+    <style>
+        body {
+            font-family: "Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+        }
+        #container {
+            background: white;
+            border: 1px solid #ccc;
+            width: 25em;
+            margin-left: auto;
+            margin-right: auto;
+            margin-top: 100px;
+        }
+        #header {
+            width: 100%;
+            background: #417690;
+            color: #ffc;
+            overflow: hidden;
+        }
+        #branding {
+            float: left;
+        }
+        #branding h1, #branding h1 a:link, #branding h1 a:visited {
+            color: #f4f379;
+        }
+        #branding h1 {
+            padding: .2em 0 .1em 5em;
+            font-size: 18px;
+            margin: 8px 1.2em;
+            font-weight: normal;
+        }
+        #content {
+            margin: 10px 15px;
+        }
+        .form-row {
+            padding: 4px 0;
+            float: left;
+            width: 100%;
+        }
+        .form-row label {
+            padding-right: 0.5em;
+            line-height: 2em;
+            font-size: 1em;
+            clear: both;
+            font-weight: 500;
+        }
+        .form-row input {
+            clear: both;
+            padding: 4px;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+        .submit-row{
+            clear: both;
+            padding: 1em 0 0 7em;
+        }
+    </style>
+    <div id="container">
+        <div id="header">
+            <div id="branding">
+                <h1 id="site-name">
+                    <a href="/admin">Administración</a>
+                </h1>
+            </div>
+        </div>
+        <div id="content">
+            <div id="content-main">
+                <form style="margin-top: 1em" action="/login" method="post">
+                    <div class="form-row">
+                        <label>Usuario:</label>
+                        <input type="text" name="usuario">
+                    </div>
+                    <div class="form-row">
+                        <label>Contraseña:</label>
+                        <input type="password" name="clave">
+                    </div>
+                    <div class="submit-row">
+                        <button type="submit" class="btn btn-primary">Iniciar Sesion</button>
+                    </div>
+                    @if(flash.contains("type")){
+                        <div class="alert alert-@{flash.get("type")}">
+                        @flash.get(flash.get("type"))
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+        <div id="footer">
+        </div>
+    </div>
+}

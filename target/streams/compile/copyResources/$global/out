@@ -1,0 +1,6 @@
+[0m[[0mdebug[0m] [0mCopy resource mappings: [0m
+[0m[[0mdebug[0m] [0m	(/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/conf/application.conf,/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/target/scala-2.10/classes/application.conf)[0m
+[0m[[0mdebug[0m] [0m	(/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/conf/evolutions,/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/target/scala-2.10/classes/evolutions)[0m
+[0m[[0mdebug[0m] [0m	(/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/conf/routes,/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/target/scala-2.10/classes/routes)[0m
+[0m[[0mdebug[0m] [0m	(/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/conf/evolutions/default,/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/target/scala-2.10/classes/evolutions/default)[0m
+[0m[[0mdebug[0m] [0m	(/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/conf/evolutions/default/1.sql,/Users/diegodelfin7/Desktop/proy Tienda virtual/tienda/target/scala-2.10/classes/evolutions/default/1.sql)[0m

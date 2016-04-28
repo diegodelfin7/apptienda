@@ -1,0 +1,17 @@
+@(usuario: String)(content1:Html)(content2:Html)(content3:Html)(content4:Html)(content5:Html)
+@import views.html.administrador.modulo
+@modulo(usuario){
+    @content1
+}{
+    @content2
+}{
+    Listar @content3
+}{
+    <ul class="object-tools">
+        <li>
+            @content4
+        </li>
+    </ul>
+}{
+    @content5
+}

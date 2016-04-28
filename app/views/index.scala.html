@@ -1,0 +1,110 @@
+@(message: String)
+@main(message) {
+    <style>
+        div.maq{
+            display:inline-block;
+            margin: 10px 5px;
+            #padding: 0.5em 10px;
+            #border: 2px solid #234b78;
+            #width: 180px;
+            #height: 200px;
+            #text-align: center;
+            #font-size: 550%;
+            #font-weight: bold;
+            #color: #4853C9;
+            background-color: #d8d8d8;
+        }
+    </style>
+    <div id="prueba">
+
+    </div>
+    <script>
+        function isInView(elem){
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + $(elem).height();
+            //return ((elemBottom <= docViewBottom) && (elemTop >= docViewTop));
+            return ((elemTop <= docViewBottom) && (elemTop >= docViewTop))||((elemBottom <= docViewBottom) && (elemBottom >= docViewTop));
+        }
+        function isDownView(elem){
+            var docViewTop = $(window).scrollTop();
+            var docViewBottom = docViewTop + $(window).height();
+            var elemTop = $(elem).offset().top;
+            var elemBottom = elemTop + $(elem).height();
+            return (elemBottom >= docViewBottom)
+        }
+        var div='<div class="maq"><img></div>'
+        var dim={1:"261x170",
+            2:"261x113",
+            3:"259x194",
+            4:"206x214",
+            5:"261x194",
+            6:"225x225",
+            8:"261x176",
+            7:"128x223",
+            9:"250x190",
+            10:"225x225",
+            11:"275x183",
+            12:"246x204",
+            14:"480x480",
+            15:"259x194",
+            16:"225x225",
+            17:"180x153",
+            18:"229x225",
+            19:"261x146",
+            20:"198x225",
+            21:"400x400",
+            22:"225x225",
+            23:"232x225",
+            24:"225x225",
+            25:"232x200",
+            26:"261x189",
+            27:"180x162",
+            28:"225x225",
+            29:"193x225",
+            30:"261x194",
+            31:"160x214",
+            32:"225x225",
+            38:"200x210",
+            33:"261x172",
+            34:"225x225",
+            37:"235x211",
+            35:"158x225",
+            39:"260x200",
+            40:"235x223",
+            44:"260x195",
+            45:"128x212",
+            41:"180x210",
+            42:"261x156",
+            43:"261x166",
+            36:"225x224",
+            50:"160x160",
+            46:"222x225",
+            47:"400x255",
+            48:"261x201",
+            49:"261x192"}
+        var num=1
+        function agregar(){
+            var last=$("#prueba div:last-child")
+            while(total>=num && (last[0]==undefined || isInView(last))){
+                $("#prueba").append(div)
+                last=$("#prueba div:last-child")
+                last.width(dim[num].split("x")[0]).height(dim[num].split("x")[1])
+                last.find("img").attr("src","/assets/images/memes/"+num+".jpg")
+                /*last.find("img").data("num",num)
+                last.find("img").load(function(){
+                    console.log($(this).data("num")+":"+$(this).width()+"x"+$(this).height()+",")
+                })*/
+                num++
+                if(num==13)num++
+            }
+        }
+        var total=49
+        agregar()
+        $(window).scroll(function(){
+            agregar()
+        })
+    </script>
+}
+

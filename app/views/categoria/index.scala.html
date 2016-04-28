@@ -1,0 +1,101 @@
+@(usuario: String)
+@import views.html.administrador.listarBase
+@listarBase(usuario){
+
+}{
+    > Categorias
+}{
+    categorias
+}{
+    <a class="addlink" href="/admin/categoria/agregar">Añadir categoria</a>
+}{
+    <div class="actions">
+        <label for="searchbar">
+            <img src="/assets/images/icon_searchbox.png">
+        </label>
+        <input id="searchbar" type="search">
+        <span>Acción:</span>
+        <a id="eliminar">Eliminar</a>
+        <span id="action_counter">seleccionados</span>
+    </div>
+    <div class="results">
+        <table id="result_list">
+            <thead>
+                <tr>
+                    <th><input id="check_all" type="checkbox"></th>
+                    <th>Nombre</th>
+                    <th>Categoria</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        $.ajax({
+            type : "POST",
+            url : "/admin/categoria/listar",
+            async : false,
+            data : {},
+            success:function(categorias){
+                for(var i in categorias){
+                    categoria=categorias[i]
+                    var tr='<tr data-id="'+categoria.id+'">'
+                    tr+='<td>'+'<input type="checkbox">'+'</td>'
+                    tr+='<td>'+categoria.nombre+'</td>'
+                    tr+='<td>'+categoria.categoria_nombre+'</td>'
+                    tr+='</tr>'
+                    $("#result_list tbody").append(tr)
+                }
+            }
+        })
+        $("#result_list").dataTable({bInfo: false,"paging":false,
+            columnDefs: [{targets:[0],searchable:false,orderable:false}]})
+        $("#searchbar").on("keyup click",function(){
+              $("#result_list").DataTable().search($(this).val()).draw()
+        })
+        $("table.dataTable.no-footer").css({"border-bottom":"none"})
+        $("table.dataTable thead th").css({color: "#666","font-size": "11px",border:"1px solid #ddd",padding: "2px 5px"})
+        $("table.dataTable tbody td").css({padding: "5px"})
+        $("table.dataTable tbody tr").css({background: "#EDF3FE"})
+        $("table.dataTable thead th:first-child").css({"background-image":"none"})
+        $(".dataTables_filter").css({display:"none"})
+
+        var countChecked = function() {
+            var n = $("table.dataTable tbody tr td:first-child input:checked").length
+            var m = $("table.dataTable tbody tr td:first-child input:checkbox").length
+            $("#action_counter").text("seleccionados "+n+" de "+m)
+        }
+        $("#check_all").change(function(){
+            $("table.dataTable tbody tr td:first-child input:checkbox").prop("checked",$(this).is(":checked"))
+            countChecked()
+        })
+        countChecked()
+        $("table.dataTable tbody tr td:first-child input:checkbox").on( "click", countChecked)
+        $("#eliminar").click(function(){
+            var count=$("table.dataTable tbody tr td:first-child input:checked").length
+            $("table.dataTable tbody tr td:first-child input:checked").each(function(){
+                //console.log($(this).closest("tr").attr("data-id"))
+                var tr=$(this).closest("tr")
+                $.ajax({
+                    type : "POST",
+                    url : "/admin/categoria/eliminar",
+                    async : false,
+                    data : {id:tr.attr("data-id")},
+                    success:function(categoria){
+                    }
+                })
+                $("#result_list").DataTable().row(tr).remove().draw()
+            })
+            if(count==0){
+                $("#content h1:first-child").prev("div.alert").remove()
+                $("#content h1:first-child").before('<div class="alert alert-danger">Seleccione una categoria</div>')
+            }
+            else{
+                $("#content h1:first-child").prev("div.alert").remove()
+                $("#content h1:first-child").before('<div class="alert alert-success">Las categorias fueron eliminadas</div>')
+            }
+            countChecked()
+        })
+    </script>
+}

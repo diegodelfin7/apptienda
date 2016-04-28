@@ -1,0 +1,55 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Home page
+GET         /                                         controllers.Application.index()
+
+GET         /home                                     controllers.TiendaC.home()
+GET         /home/login                               controllers.TiendaC.login()
+POST        /home/login                               controllers.TiendaC.autenticar()
+GET         /home/logout                              controllers.TiendaC.logout()
+POST        /home/buscarxcategoria                    controllers.TiendaC.buscarCategoria()
+POST        /home/buscarxmarca                        controllers.TiendaC.buscarMarca()
+POST        /home/buscarxcategoriamarca               controllers.TiendaC.buscarCategoriaMarca()
+GET         /categoria/:categoria                     controllers.TiendaC.catalogoC(categoria:String)
+POST        /home/categoria/primerascategorias        controllers.ProductoC.primerasCategorias()
+POST        /home/categoria/ver                       controllers.CategoriaC.ver()
+POST        /home/categoria/ascendentes               controllers.CategoriaC.ascendentes()
+POST        /home/categoria/subcategorias             controllers.CategoriaC.subcategorias()
+POST        /home/categoria/descendientes             controllers.CategoriaC.descendientes()
+POST        /home/categoria/cantidadproductos         controllers.CategoriaC.cantidadProductos()
+GET         /marca/:categoria/:marca                  controllers.TiendaC.catalogoCM(categoria:String,marca:String)
+GET         /marca/:marca                             controllers.TiendaC.catalogoM(marca:String)
+POST        /home/producto/ver                        controllers.ProductoC.ver()
+POST        /home/producto/marcas                     controllers.ProductoC.marcas()
+POST        /home/producto/filtrarproductos           controllers.ProductoC.filtrarProductos()
+GET         /home/carrito                             controllers.TiendaC.carrito()
+
+GET         /cliente/registro                         controllers.TiendaC.registrar()
+POST        /cliente/registro                         controllers.TiendaC.agregar()
+POST        /cliente/existecuenta                     controllers.TiendaC.existeCuenta()
+GET         /cliente/editar                           controllers.TiendaC.editar()
+POST        /cliente/editar                           controllers.TiendaC.modificar()
+
+GET         /admin                                    controllers.Administrador.index()
+POST        /login                                    controllers.Administrador.autenticar()
+GET         /admin/logout                             controllers.Administrador.logout()
+
+GET         /admin/categoria                          controllers.CategoriaC.index()
+GET         /admin/categoria/agregar                  controllers.CategoriaC.categoria()
+POST        /admin/categoria/listar                   controllers.CategoriaC.listar()
+POST        /admin/categoria/agregar                  controllers.CategoriaC.agregar()
+POST        /admin/categoria/eliminar                 controllers.CategoriaC.eliminar()
+POST        /admin/categoria/existecategoria          controllers.CategoriaC.existeCategoria()
+
+GET         /admin/producto                           controllers.ProductoC.index()
+POST        /admin/producto/listar                    controllers.ProductoC.listar()
+GET         /admin/producto/agregar                   controllers.ProductoC.producto()
+POST        /admin/producto/agregar                   controllers.ProductoC.agregar()
+POST        /admin/producto/ultimascategorias         controllers.ProductoC.ultimasCategorias()
+POST        /admin/producto/eliminar                  controllers.ProductoC.eliminar()
+GET         /admin/producto/:id                       controllers.ProductoC.mostrar(id:Integer)
+POST        /admin/producto/:id                       controllers.ProductoC.editar(id:Integer)
+# Map static resources from the /public folder to the /assets URL path
+GET         /assets/*file                             controllers.Assets.at(path="/public", file)

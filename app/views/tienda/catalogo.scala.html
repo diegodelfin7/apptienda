@@ -1,0 +1,626 @@
+@(message: String,cliente: Cliente,categoria: Categoria,marca:String)
+@import views.html.tienda.template
+@template(message,cliente){
+    <style>
+        #category-navigation {
+            margin-top: 16px;
+        }
+        #category-navigation-breadcrumbs {
+            border-bottom: dotted 1px #e5e5e5;
+            padding: 0 10px 5px;
+        }
+        #category-navigation-breadcrumbs li:first-child {
+            position: relative;
+            top: -2px;
+        }
+        #category-navigation-breadcrumbs li:first-child:before {
+            content: none;
+}
+        #category-navigation-breadcrumbs li {
+            color: #f98b30;
+            display: inline-block;
+            font-size: 12px;
+            font-size: 1.18rem;
+            padding-right: 0.2em;
+        }
+        #category-navigation-breadcrumbs li:before {
+            content: '/';
+            color: #656565;
+            display: inline-block;
+        }
+        #category-navigation-breadcrumbs li:first-child a {
+            background: url(/assets/images/iconset.png) -60px -100px;
+            height: 20px;
+            width: 20px;
+            display: block;
+            text-indent: -9999px;
+        }
+        #category-navigation-breadcrumbs li>a {
+            padding-left: 0.5em;
+        }
+        #category-navigation-breadcrumbs a:hover {
+            text-decoration: underline;
+        }
+        #category-navigation-breadcrumbs a {
+            color: #656565;
+        }
+        #catalog aside {
+            border-right: 1px dotted #b2b2b2;
+            float: left;
+            padding: 10px 10px 20px 0;
+            width: 240px;
+        }
+        body {
+            color: #7f7f7f;
+        }
+        #filters .filter-title {
+            font-size: 1.4rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        #filters ul {
+            font-size: 1.3rem;
+        }
+        #filters>li {
+            margin-bottom: 40px;
+        }
+        #filters a {
+            color: #4c4c4c;
+            display: block;
+            text-decoration: none;
+        }
+        #filters li.selected>a {
+            color: #3E9BB9;
+        }
+        #filters .category-filter>li{
+            padding-left: 10px;
+            text-transform: uppercase;
+        }
+        .category-filter ul li{
+            text-transform: lowercase;
+        }
+        #filters .category-filter ul li a {
+            margin-left: 5px;
+        }
+        #filters .category-filter ul li a:before {
+            color: #008bff;
+            content: '\2022';
+            position: relative;
+            left: -5px;
+        }
+        #filters .category-filter .category-cant {
+            color: #999;
+            font-size: 11px;
+        }
+        .category-filter li {
+            padding-left: 2px;
+            border-top: dotted 1px #e5e5e5;
+        }
+        #filters ul a:hover {
+            background: #f3f3f3;
+            text-decoration: underline;
+        }
+        .category-filter ul a,.category-filter>li a{
+            padding: 2px 0;
+        }
+        #filters #facet_brand {
+            border: dotted #ccc;
+            border-width: 1px 0;
+            max-height: 114px;
+            overflow-y: auto;
+        }
+        #filters #facet_brand li:first-child {
+            border: 0;
+        }
+        #filters .fct-scroll li, #filters #facet_brand li {
+            border-top: dotted 1px #e5e5e5;
+            margin-left: 6px;
+            padding-left: 5px;
+            position: relative;
+        }
+        #filters .fct-scroll a, #filters #facet_brand a {
+            display: block;
+            padding: 2px 0;
+        }
+        #filters .fct-scroll li:before, #filters #facet_brand li:before {
+            color: #008bff;
+            content: "»";
+            position: absolute;
+            left: -5px;
+        }
+        .brands p.brand-filter {
+            font-size: 13px;
+            margin: 13px 0;
+        }
+        #filters .ui-inputText {
+            width: 73px;
+            padding-right: 19px;
+        }
+        .priceRange-span {
+            margin-left: -20px;
+            margin-right: 3px;
+        }
+        #filters input[type=text] {
+            border: solid 1px #bfbfbf;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            color: #7f7f7f;
+            padding: 2px 5px;
+        }
+        #filters .sliderInput {
+            font-size: 12px;
+        }
+        .catalogPriceFilterSubmit:hover {
+            background-image: none;
+            background-color: #40CBD9;
+        }
+        .catalogPriceFilterSubmit {
+            width: 23px;
+            height: 23px;
+            background-color: #3883A0;
+            background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#3EA6C5),color-stop(100%,#3F6F89));
+            background-image: -webkit-linear-gradient(top,#3EA6C5,#3F6F89);
+            background-image: -moz-linear-gradient(top,#3EA6C5,#3F6F89);
+            background-image: -ms-linear-gradient(top,#3EA6C5,#3F6F89);
+            background-image: -o-linear-gradient(top,#3EA6C5,#3F6F89);
+            background-image: linear-gradient(top,#3EA6C5,#3F6F89);
+            border: 0;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            color: #fff;
+            font: 100 18px/20px "function-pro",Helvetiva,Arial,sans-serif;
+            padding: 0 0 2px 0;
+            text-decoration: none;
+            position: relative;
+            margin-left: 2px;
+        }
+        #catalog-content {
+            border-bottom: dotted 1px #ccc;
+            margin-left: 250px;
+            padding: 0 0 5px 10px;
+        }
+        .paging {
+            padding-bottom: 10px;
+            padding-top: 5px;
+            position: relative;
+        }
+        #catalog-sort {
+            font-size: 12px;
+            font-size: 1.2rem;
+        }
+        #catalog-sort label {
+            padding-right: 5px;
+            font-size: 1.3rem;
+            line-height: 18px;
+            font-weight: 500;
+        }
+        #catalog-sort select {
+            width: 100px;
+            color: #333;
+            font: 13px/15px Tahoma,Arial,sans-serif;
+            font-size: 1.3rem;
+        }
+        #items-founds {
+            margin-top: 15px;
+        }
+        #items-founds span {
+            padding-left: 5px;
+            padding-right: 5px;
+            font-size: 12px;
+            color: #7f7f7f;
+            font: 1.2em/1.6em Tahoma,Arial,sans-serif;
+            text-transform: uppercase;
+            margin: 8px 0;
+        }
+        #catalog-content .product-items {
+            padding-bottom: 10px;
+            text-align: left;
+        }
+        .product-items {
+            border-top: 1px dotted #e5e5e5;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+        .product-items .product-item {
+            background: #fff;
+            border: dotted #e5e5e5;
+            border-width: 0 0 1px;
+            display: inline-block;
+            margin-left: -4px;
+            text-align: left;
+            vertical-align: top;
+            width: 180px;
+            position: relative;
+        }
+        .product-items .product-item:hover {
+            -webkit-box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.45);
+            border: 0;
+            border-radius: 5px;
+            padding: 0;
+            margin: -5px -5px -10px -7px;
+            z-index: 1;
+        }
+        .product-items ul, .product-items li {
+            margin: 0;
+            padding: 0;
+        }
+        .product-items .product-item a>ul {
+            border: dotted #e5e5e5;
+            border-width: 0 1px;
+            margin: 9px 0;
+            height: 300px;
+            padding: 0 9px;
+        }
+        .product-items .product-item:hover>a>ul {
+            border: 0;
+            padding: 0 10px;
+        }
+        .product-items .product-item .product-item-img {
+            height: 160px;
+            margin: 0 auto 10px;
+            overflow: hidden;
+            width: 160px;
+        }
+        .product-items .product-item .product-item-brand {
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-weight: 100;
+            text-transform: uppercase;
+            color: #7f7f7f;
+        }
+        .product-items .product-item .product-item-name {
+            color: #4c4c4c;
+            padding-bottom: 5px;
+        }
+        .product-items .product-item .product-item-price {
+            text-align: center;
+        }
+        .product-items .product-item .product-itm-price-old {
+            color: #999;
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            text-decoration: line-through;
+        }
+        .product-items .product-item .product-itm-price-new {
+            color: #ee2c3b;
+            display: block;
+            font: 16px/16px "function-pro",Helvetiva,Arial,sans-serif;
+            font-size: 1.6rem;
+            line-height: 1em;
+        }
+        .product-items .product-item .product-itm-discount-percent {
+            background: url(/assets/images/iconset.png) -180px 0;
+            display: block;
+            color: #fff;
+            font-size: 16px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            height: 50px;
+            line-height: 50px;
+            position: relative;
+            left: 120px;
+            top: -260px;
+            text-shadow: 0 1px 0 black;
+            width: 50px;
+        }
+        .product-items .product-item button {
+            background-color: #fbaf3a;
+            background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#f26823),color-stop(100%,#c23927));
+            background-image: -webkit-linear-gradient(top,#f26823,#c23927);
+            background-image: -moz-linear-gradient(top,#f26823,#c23927);
+            background-image: -ms-linear-gradient(top,#f26823,#c23927);
+            background-image: -o-linear-gradient(top,#f26823,#c23927);
+            background-image: linear-gradient(top,#f26823,#c23927);
+            border: 0;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            color: #fff;
+            font: 100 14px/20px "function-pro",Helvetiva,Arial,sans-serif;
+            padding: 3px 10px 3px 30px;
+            position: absolute;
+            text-decoration: none;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+            text-transform: uppercase;
+            top: 280px;
+        }
+        .product-items .product-item button:hover {
+            background-image:none;
+            background-color: #fbaf3a;
+        }
+    </style>
+}{
+    <div id="category-navigation-catalog">
+        <nav id="category-navigation">
+            <ul id="category-navigation-breadcrumbs">
+            </ul>
+        </nav>
+    </div>
+    <div id="catalog">
+        <aside>
+            <ul id="filters">
+                <li class="category-segment">
+                    <div class="filter-title">
+                        categoria
+                    </div>
+                    <div>
+                        <ul class="category-filter">
+
+                        </ul>
+                    </div>
+                    <div>
+
+                    </div>
+                </li>
+                <li class="brands">
+                    <div class="filter-title">
+                        marca
+                    </div>
+                     <div>
+                        <ul id="facet_brand" class="fct-scroll" style="height: 110px">
+                        </ul>
+                    </div>
+                </li>
+                <li class="price-slider">
+                    <div class="filter-title">
+                        precio
+                    </div>
+                    <div>
+                        <div class="sliderInput clearfix">
+                            <span class="priceRangeFrom">
+                                <input id="input-RangeFrom" class="ui-inputText fss" type="text" name="price_from" maxlength="8">
+                                <span class="priceRange-span">S/.</span>
+                            </span>
+                            <span class="priceSeperate">-</span>
+                            <span class="priceRangeTo">
+                                <input id="input-RangeTo" class="ui-inputText fss" type="text" name="price_to" maxlength="8">
+                                <span class="priceRange-span">S/.</span>
+                            </span>
+                            <input class="catalogPriceFilterSubmit" type="button" value="»">
+                        </div>
+                    </div>
+                </li>
+
+            </ul>
+        </aside>
+        <div id="catalog-content">
+            <div class="paging">
+                <div id="catalog-sort">
+                    <label for="catalog-sort-order">Ordenar por</label>
+                    <select id="ordenar-productos" class="catalog-sort-order">
+                        <option value="precio"> Precio</option>
+                        <option value="descuento"> Descuento</option>
+                    </select>
+                </div>
+                <div id="items-founds" data-total="0">
+                    <span>0 Items encontrados</span>
+                </div>
+            </div>
+            <ul id="catalog-items" class="product-items"></ul>
+        </div>
+    </div>
+    <script>
+        var marca="@{marca}"
+        marca=marca.toLowerCase()
+        var categoria=""
+        var id=""
+        @if(categoria!=null){
+            categoria="@{categoria.nombre}"
+            categoria=categoria.toLowerCase()
+            id=@categoria.id
+        }
+        if(categoria!=""){
+            $.ajax({
+                type : "POST",
+                url : "/home/categoria/ascendentes",
+                async : false,
+                data : {nombre:categoria},
+                success:function(categorias){
+                    $("#category-navigation-breadcrumbs").append('<li><a href="/home" title="Inicio">Inicio</a></li>')
+                    var catNav=marca==""?categorias.slice().reverse().slice(0,categorias.length-1):categorias.slice().reverse()
+                    for(var i in catNav){
+                        var nombre=catNav[i].nombre
+                        $("#category-navigation-breadcrumbs").append('<li><a href="/categoria/'+
+                            catNav[i].nombre.replace(/ /g,"-")+'" title="'+nombre+'">'+nombre+'</a></li>')
+                    }
+                    var span=""
+                    if(marca=="")span='<span>'+categoria+'</span>'
+                    else span='<span>'+marca+'</span>&nbsp;<span>( más de <a href="/marca/'+marca+'">'+marca+'</a>)</span>'
+                    $("#category-navigation-breadcrumbs").append('<li>'+span+'</li>')
+                    categorias=categorias.slice(0,Math.min(categorias.length,3)).reverse()
+                    for(var i in categorias){
+                        if(i==0){
+                            //$(".category-filter").append(crearCategoria(categorias[i],marca))
+                            subcategorias($(".category-filter"),categorias[i],marca)
+                        }
+                        else{
+                            var li=$(".category-filter li[data-id="+categorias[i].id+"]")
+                            subcategorias(li,categorias[i],marca)
+                        }
+                    }
+                    $(".category-filter li[data-id="+id+"]").addClass("selected")
+                    $(".category-filter .rem").remove()
+                }
+            })
+        }
+        else{
+            $.ajax({
+                type : "POST",
+                url : "/home/categoria/primerascategorias",
+                async : false,
+                data : {},
+                success:function(categorias){
+                    for(var i in categorias){
+                        $(".category-filter").append(crearCategoria(categorias[i],marca))
+                            subcategorias($(".category-filter>li:last-child"),categorias[i],marca)
+                    }
+                    $(".category-filter .rem").remove()
+                }
+            })
+        }
+        function subcategorias(elem,categoria,marca){
+            $.ajax({
+                type : "POST",
+                url : "/home/categoria/subcategorias",
+                async : false,
+                data : {nombre:categoria.nombre.toLowerCase()},
+                success:function(categorias){
+                    $(elem).removeClass("rem")
+                    var ul;
+                    if($(elem).is("ul"))ul=$(elem)
+                    if($(elem).is("li")){
+                        $(elem).append('<ul></ul>')
+                        ul=$(elem).find(">ul")
+                    }
+                    for(var i in categorias){
+                        var nombre=categorias[i].nombre.toLowerCase()
+                        var cantidad=cantidadProductos(nombre,marca)
+                        $(ul).append(crearCategoria(categorias[i],marca,cantidad))
+                        //if(cantidad==0)$(ul).find("li:last-child").addClass("rem")
+                    }
+                }
+            })
+        }
+        function cantidadProductos(nombre,marca){
+            var cantidad=0
+            $.ajax({
+                type : "POST",
+                url : "/home/categoria/cantidadproductos",
+                async : false,
+                data : {nombre:nombre,marca:marca},
+                success:function(cantidadP){
+                    cantidad=cantidadP
+                }
+            })
+            return cantidad
+        }
+        function crearCategoria(categoria,marca,cant){
+            var nombre=categoria.nombre.toLowerCase()
+            var cantidad=cant!=undefined?cant:cantidadProductos(nombre,marca)
+            var href=marca!=""?'/marca/'+nombre.replace(/ /g,"-")+'/'+marca:'/categoria/'+nombre.replace(/ /g,"-")
+            return '<li data-id='+categoria.id+'>' +
+                '<a href="'+href+'">' +
+                '<span>'+nombre+'</span><span class="category-cant"> ('+cantidad+')</span>' +
+                '</a></li>'
+        }
+        if(marca==""){
+            $.ajax({
+                type : "POST",
+                url : "/home/producto/marcas",
+                async : false,
+                data : {},
+                success:function(marcas){
+                    for(var i in marcas){
+                        var marca1=marcas[i].toLowerCase()
+                        $("#facet_brand").append('<li><a href="/marca/'+categoria.replace(/ /g,"-")+'/'+marca1+'">'+marca1+'</a></li>')
+                    }
+                }
+            })
+        }
+        else{
+            $("#facet_brand").after('<p class="brand-filter"><b>'+marca+'</b></p>')
+            $("#facet_brand").remove()
+        }
+        $(".catalogPriceFilterSubmit").click(function(){
+            filtrarProductos(categoria,marca,{min:$("#input-RangeFrom").val(),max:$("#input-RangeTo").val()},$("#ordenar-productos").val())
+        })
+        $("#ordenar-productos").change(function(){
+            filtrarProductos(categoria,marca,{min:$("#input-RangeFrom").val(),max:$("#input-RangeTo").val()},$("#ordenar-productos").val())
+        })
+        $("#ordenar-productos").change()
+        function filtrarProductos(nombre,marca,precio,orden){
+            $.ajax({
+                type : "POST",
+                url : "/home/producto/filtrarproductos",
+                async : false,
+                data : {nombre:nombre,marca:marca,precioMin:precio.min,precioMax:precio.max,orden:orden},
+                success:function(productos){
+                    $("#items-founds span").attr("data-id",productos.length)
+                    $("#items-founds span").text(productos.length+" Items encontrados")
+                    $("#catalog-items").text("")
+                    for(var i in productos){
+                        price=""
+                        if(productos[i].descuento==0){
+                            price='<span class="product-itm-price-new" itemprop="price">S/. '+productos[i].precio+'</span>'
+                        }
+                        else{
+                             price='<span class="product-itm-price-old">S/. '+productos[i].precio+'</span>'+
+                            '<span class="product-itm-price-new" itemprop="price">S/. '+productos[i].precio_actual+'</span>'+
+                            '<span class="product-itm-discount-percent"> -'+productos[i].descuento+'<sup>%</sup></span>'
+                        }
+                        $("#catalog-items").append('<li class="product-item"><a><ul data-id='+productos[i].id+'>' +
+                            '<li class="product-item-img"><img width="160px" height="160px" src="/assets/productos/'+productos[i].image+'"></li>'+
+                            '<li class="product-item-brand">'+productos[i].marca+'</li>'+
+                            '<li class="product-item-name"><em itemprop="name">'+productos[i].modelo+'</em></li>'+
+                            '<li class="product-item-price">'+price+'</li>'+
+                            '<li><button id="AddToCart"><strong>Compra Ahora</strong></button></li>'+
+                        '</ul></a>'+'</li>')
+                    }
+                    $("#catalog-items #AddToCart").click(function(){
+                        if(typeof(localStorage)!=="undefined"){
+                            var id=$(this).closest("ul").attr("data-id")
+                            if(localStorage.carrito==undefined || localStorage.carrito==""){
+                                localStorage.carrito=id+":"+1
+                            }
+                            else{
+                                if(!productoEnCarrito(id)){
+                                    localStorage.carrito+=","+id+":"+1
+                                }
+                                else{
+                                    incCantCarrito(id)
+                                }
+                            }
+                            //window.location.href="/home/carrito"
+                            var total=0;
+                            var items=0;
+                            for(var i in localStorage.carrito.split(",")){
+                                var id=localStorage.carrito.split(",")[i].split(":")[0]
+                                var cant=localStorage.carrito.split(",")[i].split(":")[1]
+                                 $.ajax({
+                                    type : "POST",
+                                    url : "/home/producto/ver",
+                                    async : false,
+                                    data : {id:id},
+                                    success:function(producto){
+                                        total+=parseFloat(producto.precio_actual)*cant
+                                        items+=parseInt(cant)
+                                    }
+                                })
+                             }
+                            $(".user-nav-cart-items").text(items)
+                            $(".user-nav-cart-grand-total").text("S/. "+parseDouble(total))
+                        }
+                    })
+                    function parseDouble(numero){
+                        return parseFloat(numero).toFixed(2)
+                    }
+                    function productoEnCarrito(id){
+                        for(var i in localStorage.carrito.split(",")){
+                            if(localStorage.carrito.split(",")[i].split(":")[0]==id)return true
+                        }
+                        return false
+                    }
+                    function incCantCarrito(id){
+                        var carrito=""
+                        for(var i in localStorage.carrito.split(",")){
+                            var ID=localStorage.carrito.split(",")[i].split(":")[0]
+                            var cant=localStorage.carrito.split(",")[i].split(":")[1]
+                            if(ID==id){
+                                carrito+=ID+":"+(parseInt(cant)+1)+","
+                            }
+                            else{
+                                carrito+=localStorage.carrito.split(",")[i]+","
+                            }
+                        }
+                        localStorage.carrito=carrito.substring(0,carrito.length-1)
+                    }
+                }
+            })
+        }
+    </script>
+}

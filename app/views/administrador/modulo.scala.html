@@ -1,0 +1,117 @@
+@(usuario: String)(content1:Html)(content2:Html)(content3:Html)(content4:Html)(content5:Html)
+@import views.html.administrador.template
+@template(usuario){
+    <style>
+        div.breadcrumbs{
+            padding: 2px 8px 3px 8px;
+            font-size: 11px;
+            color: #999;
+            border-top: 1px solid #fff;
+            border-bottom: 1px solid #ddd;
+            #text-align: left;
+        }
+        li, dt, dd {
+            font-size: 11px;
+            line-height: 14px;
+        }
+        .object-tools{
+            font-size: 10px;
+            font-weight: bold;
+            font-family: Arial,Helvetica,sans-serif;
+            padding-left: 0;
+            float: right;
+            position: relative;
+            margin-top: -2.4em;
+            margin-bottom: -2em;
+        }
+        .object-tools a.addlink{
+            background: #999 url(../assets/images/tooltag-add.png) 95% center no-repeat;
+            padding-right: 26px;
+        }
+        .object-tools a, .object-tools a:visited {
+            display: block;
+            float: left;
+            color: #fff;
+            padding: .2em 10px;
+            background: #999;
+        }
+        .object-tools a:hover {
+            background: #5b80b2
+        }
+        .object-tools a {
+            border-radius: 15px;
+        }
+        h1 {
+            font-size: 18px;
+            color: #666;
+            padding: 0 6px 0 0;
+            margin: 0 0 .2em 0;
+        }
+        input[type=text], input[type=password], input[type=email], input[type=url], input[type=number], textarea, select, .vTextField {
+            border: 1px solid #ccc;
+        }
+        .vTextField {
+            width: 20em;
+        }
+        .vButton {
+            border: 2px solid #5b80b2;
+            background: #7CA0C7;#url(/assets/images/default-bg.gif) bottom repeat-x;
+            font-weight: bold;
+            color: #fff;
+            #float: right;
+        }
+
+        .add-row td a{
+            background: url(/assets/images/icon_addlink.gif) 0 50% no-repeat;
+            padding-left: 14px;
+            font-size: 11px;
+            outline: 0;
+        }
+        .inline-deletelink {
+            float: right;
+            text-indent: -9999px;
+            background: transparent url(/assets/images/inline-delete.png) no-repeat;
+            width: 15px;
+            height: 15px;
+            border: 0px none;
+            outline: 0;
+        }
+        .inline-deletelink:hover {
+            background-position: -15px 0px
+        }
+        td.padd {
+            padding-top: 5px;
+            #padding-bottom: 5px;
+        }
+        td.padd input[type='text'] {
+            width: 17em;
+        }
+        div.well {
+            width: 150px;
+            margin-top: 10px;
+            padding: 10px;
+        }
+        #draganddrop{
+            border: 2px dashed #92AAB0;
+            #height: 50px;
+            color: #92AAB0;
+            text-align: center;
+            vertical-align: middle;
+            font-size: 110%;
+            font-weight: bold;
+            #display: table-cell;
+        }
+    </style>
+    @content1
+}{
+    <div class="breadcrumbs">
+        <a href="/admin">Inicio</a>
+        @content2
+    </div>
+}{
+    @content3
+}{
+    @content4
+}{
+    @content5
+}

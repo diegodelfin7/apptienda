@@ -1,0 +1,782 @@
+@(message: String,cliente: Cliente)(content1: Html)(content2: Html)
+@main(message) {
+    <style>
+        body {
+            font: 1em/1.5em Tahoma,Arial,sans-serif;
+        }
+        ul{
+            margin: 0;
+            padding: 0;
+        }
+        li {
+            list-style: none;
+        }
+        #header {
+            margin: 2px auto;
+            width: 940px;
+            height: 80px;
+        }
+        #header div {
+            display: inline-block;
+        }
+        #header-search-bar {
+            width: 560px;
+        }
+        #searchInput {
+            width: 530px;
+            height: 35px;
+            background: #f2f2f2;
+            border-radius: 5px 0 0 5px;
+            padding: 8px;
+            color: #7f7f7f;
+            font-size: 1.3rem;
+        }
+        #searchBtn {
+            display:none;
+            height: 35px;
+            border: 1px solid #316C92;
+            border-radius: 0 5px 5px 0;
+            padding: 7px 10px 6px 25px;
+            background-position: left;
+            background-color: #3883A0;
+            background-image: -webkit-linear-gradient(top,#3EA6C5, #3F6F89);
+            font-size: 1.4em;
+            color: white;
+            text-transform: uppercase;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+            position: relative;
+            left: -5px;
+            top: 31px;
+        }
+        #header-search-bar img{
+            display: none;
+            position: relative;
+            left: 532px;
+            top: 6px;
+        }
+        #searchBtn:hover{
+            background-image: none;
+            background-color: #40CBD9;
+        }
+        #header-user {
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            text-shadow: 0 1px 0 white;
+            text-transform: uppercase;
+            border-radius: 0;
+            box-shadow: 0 0 5px #444;
+            height: 70px;
+            width: 180px;
+        }
+        #header-user a {
+            padding: 2px 9px 2px 35px;
+            color: #4386A1;
+        }
+        #header-user div {
+            width: 100%;
+        }
+        #user-nav-login {
+            border-bottom: solid 1px white;
+            background-image: -webkit-linear-gradient(top,#ddd,white);
+        }
+        #user-nav-cart {
+            border-top: 1px solid #ccc;
+            background: #FFF;
+            box-shadow: 0 2px 2px rgba(0,0,0,0.2);
+            font-size: 12px;
+            height: 25px;
+            margin: 0 0 29px 0;
+            padding-bottom: 0;
+        }
+        #user-nav-cart a {
+            padding: 4px 5px 4px 10px;
+            display: block;
+        }
+        #user-nav-cart .user-nav-cart-items {
+            border-radius: 22px;
+            box-shadow: 0 1px 1px rgba(0,0,0,0.6);
+            color: #fff;
+            font-weight: 100;
+            padding: 1px;
+            float: right;
+            text-shadow: none;
+            background-color: #4386A1;
+        }
+        #user-nav-cart img {
+            position: relative;
+            left: -5px;
+            top: -4px;
+        }
+        #user-nav-cart .user-nav-cart-grand-total {
+            font-size: 18px;
+        }
+        #header-menu {
+            border-top: 1px solid #ccc;
+            box-shadow: 0 0 6px rgba(0,0,0,0.3);
+            height: 40px;
+            background-image: -webkit-linear-gradient(top,white,#e5e5e5 94%,#ccc 98%,#999);
+        }
+        .nav_menu {
+            width: 950px;
+            margin: 0 auto;
+            padding: 0;
+        }
+        .nav_element {
+            display: inline-block;
+        }
+        a.nav_element-link {
+            display: table-cell;
+            padding: 0 6px;
+            width: 88px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            word-wrap: break-word;
+            font: 12px/1em "function-pro",Helvetiva,Arial,sans-serif;
+            font-size: 1.2rem;
+            color: #444;
+            text-transform: uppercase;
+            text-decoration: none;
+        }
+        .nav_element-link:hover,.is_active .nav_element-link{
+            color: #fff;
+            text-shadow: 0 1px 0 rgba(0,0,0,.5);
+            background-color: #458BA5;
+            background-image: -webkit-linear-gradient(top,#50B9E0,#1E6283);
+            background-image: linear-gradient(to bottom,#50B9E0,#1E6283);
+        }
+        .is_active .nav_element-container {
+            display: block;
+        }
+        .nav_element-container {
+            display: none;
+            position: absolute;
+            width: 940px;
+            height: 400px;
+            min-height: 120px;
+            left: 160px;
+            margin-top: -1px;
+            padding: 10px 0;
+            background-color: #fff;
+            background-color: rgba(255,255,255,.98);
+            box-shadow: 0 0 2px 0 rgba(0,0,0,.4);
+            z-index: 50;
+        }
+        #content h1 {
+            height: 30px;
+            margin: 0 auto;
+            max-width: 940px;
+        }
+        #searchResult {
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-weight: 100;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            line-height: 18px;
+            color: #666;
+            background: #fff;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            position: absolute;
+            width: 529px;
+            border-radius: 0!important;
+            left: 26%;
+            top: 70px;
+            z-index: 100;
+        }
+        #searchResult ul h3 {
+            text-transform: uppercase;
+            padding-left: 10px;
+            font-size: 1.6rem;
+        }
+        #searchResult a {
+            display: block;
+            padding: 2px 10px;
+        }
+        #searchResult a:hover {
+            background-color: #EEE;
+        }
+        .search-category span,.search-brand span{
+            color: #4386A1
+        }
+        .search-brand a,span.brand-name {
+            color: #000;
+        }
+        #content {
+            margin: 0 auto!important;
+            position: relative;
+            width: 940px;
+            min-height: 300px;
+        }
+        #content .unit {
+            float: left;
+            margin-top: 60px;
+            padding: 10px;
+            #width: 449px;
+            width: 50%;
+        }
+        #content .lastUnit {
+            border-left: 1px dotted #ccc;
+        }
+        #content .newcustomer {
+            color: #458BA5;
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-size: 20px;
+            line-height: 1.2;
+            padding: 0 20px 0 0;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .ui-formRow label {
+            font-size: 13px;
+            font-size: 1.4rem;
+            line-height: 18px;
+            color: #7f7f7f;
+        }
+        .ui-formRow input {
+            font: 13px/15px Tahoma,Arial,sans-serif;
+            font-size: 1.3rem;
+            width: 60%;
+            border: solid 1px #bfbfbf;
+            border-radius: 5px;
+            -webkit-box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.2) inset;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+            color: #7f7f7f;
+            padding: 2px 5px;
+        }
+        #content .button {
+            background-image: -webkit-linear-gradient(top,#50B9E0,#1E6283);
+            border-radius: 5px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+            color: #fff;
+            font: 100 18px/20px "function-pro",Helvetiva,Arial,sans-serif;
+            float: right;
+            padding: 3px 10px 3px 30px;
+            position: relative;
+            text-decoration: none;
+            text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+            text-transform: uppercase;
+        }
+        #form-account-login .button {
+            float: left;
+            margin-left: 100px;
+            margin-top: 10px;
+        }
+        #content fieldset {
+            border: 0;
+        }
+        #content .ui-formRow {
+            margin: 5px 0;
+        }
+        .elements-4 .col-3 {
+            padding: 0 10px;
+            width: 224px;
+        }
+        .elements-2 .col-3 {
+            padding: 0 10px;
+            width: 264px;
+        }
+        .col-3 {
+            float: left;
+            padding: 0 15px 15px;
+            width: 206px;
+            border-right: 1px solid #e8e8e8;
+            height: 375px;
+        }
+        .subnav__title, .subnav__category {
+            display: block;
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            text-decoration: none;
+            margin-left: 5px;
+        }
+        .subnav__title, .subnav__title:link, .subnav__title:visited {
+            color: #000;
+            font-size: 14px;
+            text-transform: uppercase;
+            line-height: 18px;
+            padding-top: 15px;
+        }
+        .subnav__category, .subnav__category:link, .subnav__category:visited {
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-size: 14px;
+            font-weight: 100;
+            line-height: 18px;
+            color: #666;
+        }
+        .subnav__title:hover {
+            color: #4386A1;
+        }
+        .subnav__category:hover {
+            text-decoration: underline;
+        }
+    </style>
+    @content1
+    <div id="header">
+        <a href="/home" id="logo">
+            <img src="/assets/images/logo.jpg" width="160px" height="66px" style="margin-top: -20px;">
+        </a>
+        <div id="header-search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar por palabras claves, marcas, productos">
+            <input type="button" id="searchBtn" value="Buscar"><img src="/assets/images/icon_searchbox.png">
+            <div id="searchResult">
+            </div>
+        </div>
+        <div id="header-user">
+            <div id="user-nav-login">
+                @if(cliente==null){
+                    <a href="/home/login">Iniciar Sesión</a>
+                }
+                @if(cliente!=null){
+                    <a href="/cliente/editar" style="padding:0;color:inherit;"><strong style="width:90px;overflow: hidden">
+                        @Cliente.find.byId(cliente.id).nombre
+                    </strong></a>
+                    <a href="/home/logout" style="padding: 0;float:right">Cerrar sesión</a>
+                }
+            </div>
+            <div id="user-nav-cart">
+                <a href="/home/carrito">
+                    Mi Carrito <span class="user-nav-cart-items">(0)</span>
+                    <div style="position: relative;top: 10px;">
+                        <img src="/assets/images/carrito.jpg" width="25px" height="25px">
+                        <span class="user-nav-cart-grand-total">
+                            S/. 0.00
+                        </span>
+                    </div>
+                </a>
+            </div>
+            <script>
+                if(localStorage.carrito!=undefined && localStorage.carrito!=""){
+                    var total=0;
+                    var items=0;
+                    for(var i in localStorage.carrito.split(",")){
+                        var id=localStorage.carrito.split(",")[i].split(":")[0]
+                        var cant=localStorage.carrito.split(",")[i].split(":")[1]
+                         $.ajax({
+                            type : "POST",
+                            url : "/home/producto/ver",
+                            async : false,
+                            data : {id:id},
+                            success:function(producto){
+                                total+=parseFloat(producto.precio_actual)*cant   
+                                items+=parseInt(cant)           
+                            }
+                        })
+                     }
+                    $(".user-nav-cart-items").text(items)
+                    $(".user-nav-cart-grand-total").text("S/. "+parseDouble(total))
+                }
+                function parseDouble(numero){
+                    return parseFloat(numero).toFixed(2)
+                }
+            </script>
+        </div>
+    </div>
+    <div id="header-menu">
+        <ul class="nav_menu">
+            <li class="nav_element">
+                <a class="nav_element-link">Ofertas</a>
+            </li>
+            <li class="nav_element">
+                <a class="nav_element-link" href="/categoria/celulares-telefonia-y-gps">Celulares y Tablets</a>
+                <div class="nav_element-container">
+                    <div class="elements-2">
+                        <div class="col-3">
+                            <a href="/categoria/celulares" class="subnav__title">Celulares</a>
+                            <a href="/categoria/smartphones" class="subnav__category">Smartphones</a>
+                            <a href="/categoria/dual-sim" class="subnav__category">Dual Sim</a>
+                            <a href="/categoria/basicos" class="subnav__category">Celulares básicos</a>
+                            <a href="/categoria/smartwatch" class="subnav__category">Smartwatches</a>
+
+                            <a href="#" class="subnav__title">MÁS VISTOS</a>
+                            <a href="/marca/celulares/samsung" class="subnav__category">Samsung Galaxy</a>
+                            <a href="/categoria/celulares-iphones" class="subnav__category">iPhone</a>
+                            <a href="/marca/celulares/motorola" class="subnav__category">Motorola</a>
+                            <a href="/marca/celulares/sony" class="subnav__category">Sony Xperia</a>
+                            <a href="/marca/celulares/lg" class="subnav__category">LG</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/categoria/accesorios-para-celulares" class="subnav__title">ACCESORIOS PARA CELULARES</a>
+                            <a href="/categoria/audifonos-celulares" class="subnav__category">Audífonos</a>
+                            <a href="/categoria/cases" class="subnav__category">Cases y protectores</a>
+                            <a href="/categoria/cargadores" class="subnav__category">Cargadores</a>
+                            <a href="/categoria/parlantes" class="subnav__category">Parlantes</a>
+                            <a href="/categoria/otros-accesorios" class="subnav__category">Otros accesorios</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/categoria/tablets-y-accesorios" class="subnav__title">TABLETS Y ACCESORIOS</a>
+                            <a href="/categoria/tablets" class="subnav__category">Tablets</a>
+                            <a href="/categoria/tablets-ipad" class="subnav__category">iPads</a>
+                            <a href="/categoria/accesorios-tablets" class="subnav__category">Accesorios para tablets</a>
+                            <a href="/categoria/gps" class="subnav__title">GPS</a>
+                            <a href="/categoria/telefonia-fija" class="subnav__title">TELEFONÍA FIJA</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+             <li class="nav_element">
+                <a class="nav_element-link" href="/categoria/tv-audio-y-video">TV , Audio, y Foto</a>
+                <div class="nav_element-container">
+                    <div class="elements-2">
+                        <div class="col-3">
+                            <a href="/categoria/tv-audio-y-video" class="subnav__title">Tv y video</a>
+                            <a href="/categoria/televisores" class="subnav__category">Televisores</a>
+                            <a href="/categoria/reproductores-de-video" class="subnav__category">DVDs y Blu-Ray</a>
+                            <a href="/categoria/cine-en-casa" class="subnav__category">Cine en Casa</a>
+                            <a href="/categoria/accesorios-para-tvs" class="subnav__category">Accesorios para TV</a>
+                            <a href="#" class="subnav__title">MÁS VISTOS</a>
+                            <a href="/categoria/televisores-3d-smart" class="subnav__category">Smart 3D TV</a>
+                            <a href="/categoria/led" class="subnav__category">LED TV</a>
+                            <a href="/categoria/televisores-ultra-hd-y-4k" class="subnav__category">UHD y 4K</a>
+                            <a href="/marca/televisores/samsung" class="subnav__category">Samsung</a>
+                            <a href="/marca/televisores/lg" class="subnav__category">LG</a>
+                            <a href="/marca/televisores/sony" class="subnav__category">Sony Bravia</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/categoria/audio" class="subnav__title">Audio</a>
+                            <a href="/categoria/audifonos" class="subnav__category">Audífonos</a>
+                            <a href="/categoria/docks-y-parlantes" class="subnav__category">Docks y Parlantes</a>
+                            <a href="/categoria/ipods-y-reproductores-mp3" class="subnav__category">Reproductores MP3</a>
+                            <a href="/categoria/mini-y-microcomponentes" class="subnav__category">Mini y Microcomponentes</a>
+                            <a href="/categoria/audio-profesional" class="subnav__category">Audio profesional</a>
+                            <a href="/categoria/audio-para-autos" class="subnav__category">Audio para autos</a>
+                            <a href="#" class="subnav__title">MÁS VISTOS</a>
+                            <a href="/marca/audio/sony" class="subnav__category">Sony</a>
+                            <a href="/marca/audio/philips" class="subnav__category">Philips</a>
+                            <a href="/marca/audio/beats" class="subnav__category">Beats</a>
+                            <a href="/marca/audio/skullcandy" class="subnav__category">Skullcandy</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/categoria/camaras-y-fotografia" class="subnav__title">FOTOGRAFÍA</a>
+                            <a href="/categoria/camaras-digitales" class="subnav__category">Cámaras digitales</a>
+                            <a href="/home" class="subnav__category">Cámaras profesionales</a>
+                            <a href="/home" class="subnav__category">Cámaras de seguridad</a>
+                            <a href="/home" class="subnav__category">Cámaras deportivas</a>
+                            <a href="/home" class="subnav__category">Videocámaras</a>
+                            <a href="/home" class="subnav__category">Accesorios, lentes y objetivos</a>
+                            <a href="#" class="subnav__title">MÁS VISTOS</a>
+                            <a href="/home" class="subnav__category">Canon</a>
+                            <a href="/home" class="subnav__category">Nikon</a>
+                            <a href="/home" class="subnav__category">Go Pro</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav_element">
+                <a class="nav_element-link" href="/categoria/computadoras">cómputo y videojuegos</a>
+                <div class="nav_element-container">
+                    <div class="elements-2">
+                        <div class="col-3">
+                            <a href="/categoria/computadoras" class="subnav__title">CÓMPUTO</a>
+                            <a href="/categoria/laptops-y-notebooks" class="subnav__category">Laptops y Notebooks</a>
+                            <a href="/categoria/desktop-y-all-in-ones" class="subnav__category">Desktop</a>
+                            <a href="/categoria/memorias-usb" class="subnav__category">Memorias USB</a>
+                            <a href="/categoria/discos-duros" class="subnav__category">Discos duros</a>
+                            <a href="/categoria/accesorios-para-pc" class="subnav__category">Accesorios para PC</a>
+                            <a href="/categoria/impresoras-y-consumibles" class="subnav__category">Impresoras</a>
+                            <a href="/categoria/gamers" class="subnav__category">Gamers</a>
+                            <a href="/categoria/tablets-y-accesorios" class="subnav__title">TABLETS Y ACCESORIOS</a>
+                            <a href="/categoria/tablets" class="subnav__category">Tablets</a>
+                            <a href="/categoria/tablets-ipad" class="subnav__category">iPads</a>
+                            <a href="/categoria/accesorios-tablets" class="subnav__category">Accesorios para tablets</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="#" class="subnav__title">MÁS VISTOS</a>
+                            <a href="/home" class="subnav__category">Samsung Galaxy</a>
+                            <a href="/home" class="subnav__category">Apple</a>
+                            <a href="/home" class="subnav__category">HP</a>
+                            <a href="/home" class="subnav__category">Toshiba</a>
+                            <a href="/home" class="subnav__category">Lenovo</a>
+                            <a href="/home" class="subnav__category">AOC</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Videojuegos</a>
+                            <a href="/home" class="subnav__category">PlayStation 4</a>
+                            <a href="/home" class="subnav__category">PlayStation 3</a>
+                            <a href="/home" class="subnav__category">Nintendo</a>
+                            <a href="/home" class="subnav__category">Xbox One</a>
+                            <a href="/home" class="subnav__category">Preventas</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav_element">
+                <a class="nav_element-link" href="/categoria/hogar">hogar</a>
+                <div class="nav_element-container">
+                    <div class="elements-2">
+                        <div class="col-3">
+                            <a href="/categoria/muebles" class="subnav__title">Muebles</a>
+                            <a href="/categoria/muebles-dormitorio" class="subnav__category">Dormitorio</a>
+                            <a href="/categoria/salas" class="subnav__category">Sala</a>
+                            <a href="/categoria/sala-de-tv" class="subnav__category">Sala de TV</a>
+                            <a href="/categoria/muebles-comedor" class="subnav__category">Comedor</a>
+                            <a href="/categoria/muebles-para-cocina" class="subnav__category">Cocina</a>
+                            <a href="/categoria/estudio-y-oficina" class="subnav__category">Estudio y Oficina</a>
+                            <a href="/categoria/exteriores" class="subnav__category">Exteriores</a>
+                            <a href="/categoria/muebles-de-bano" class="subnav__category">Baño</a>
+                            <a href="/categoria/colchones-box-y-conjuntos/" class="subnav__title">Colchones</a>
+                            <a href="/categoria/box-tarima" class="subnav__category">Box Tarima</a>
+                            <a href="/categoria/box-spring" class="subnav__category">Box Spring</a>
+                            <a href="/categoria/ropa-de-cama" class="subnav__title">Ropa de Cama</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Parrillas</a>
+                            <a href="/home" class="subnav__category">Cajas Chinas</a>
+                            <a href="/home" class="subnav__category">Parrillas</a>
+                            <a href="/home" class="subnav__category">Accesorios</a>
+                            <a href="/home" class="subnav__category">Cilindros</a>
+                            <a href="/home" class="subnav__title">Decoración</a>
+                            <a href="/home" class="subnav__category">Accesorios decoración</a>
+                            <a href="/home" class="subnav__category">Viniles y Tapices</a>
+                            <a href="/home" class="subnav__category">Cuadros y portaretratos</a>
+                            <a href="/home" class="subnav__category">Espejos</a>
+                            <a href="/home" class="subnav__title">Limpieza del hogar</a>
+                            <a href="/home" class="subnav__category">Organizadores</a>
+                            <a href="/home" class="subnav__category">Artículos de limpieza</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Cocina</a>
+                            <a href="/home" class="subnav__category">Ollas y Sartenes</a>
+                            <a href="/home" class="subnav__category">Utensilios para cocinar</a>
+                            <a href="/home" class="subnav__category">Cubiertos y vajillas</a>
+                            <a href="/home" class="subnav__category">Moldes y recipientes</a>
+                            <a href="/home" class="subnav__category">Cristalería</a>
+                            <a href="/home" class="subnav__category">Cuchillos y tablas</a>
+                            <a href="/home" class="subnav__category">Utensilios para cocinar</a>
+                            <a href="/home" class="subnav__title">Iluminación</a>
+                            <a href="/home" class="subnav__category">Iluminación interior</a>
+                            <a href="/home" class="subnav__category">Iluminación exterior</a>
+                            <a href="/home" class="subnav__category">Focos</a>
+                            <a href="/home" class="subnav__title">Ferretería</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav_element">
+                <a class="nav_element-link" href="/home">electrodomésticos</a>
+                <div class="nav_element-container">
+                    <div class="elements-2">
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Refrigeración</a>
+                            <a href="/home" class="subnav__category">Refrigeradoras</a>
+                            <a href="/home" class="subnav__category">Friobares</a>
+                            <a href="/home" class="subnav__category">Congeladoras</a>
+                            <a href="/home" class="subnav__category">Vineras</a>
+                            <a href="/home" class="subnav__category">Dispensadores de agua</a>
+                            <a href="/home" class="subnav__title">Climatización</a>
+                            <a href="/home" class="subnav__category">Aire Acondicionado y Ventiladores</a>
+                            <a href="/home" class="subnav__category">Deshumedecedores y purificadores</a>
+                            <a href="/home" class="subnav__category">Calefactores y Estufas</a>
+                            <a href="/home" class="subnav__title">Termas y Rapiduchas</a>
+                            <a href="/home" class="subnav__category">Termas Eléctricas</a>
+                            <a href="/home" class="subnav__category">Termas a Gas</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Pequeños electrodomésticos</a>
+                            <a href="/home" class="subnav__category">Microondas</a>
+                            <a href="/home" class="subnav__category">Licuadoras</a>
+                            <a href="/home" class="subnav__category">Cafeteras</a>
+                            <a href="/home" class="subnav__category">Batidoras</a>
+                            <a href="/home" class="subnav__category">Sandwicheras y Waffleras</a>
+                            <a href="/home" class="subnav__category">Parrillas Eléctricas</a>
+                            <a href="/home" class="subnav__category">Hervidores</a>
+                            <a href="/home" class="subnav__category">Sartenes Eléctricas</a>
+                            <a href="/home" class="subnav__category">Exprimidores y Extractores</a>
+                            <a href="/home" class="subnav__title">Línea Empotrable</a>
+                            <a href="/home" class="subnav__category">Cocinas Empotrables</a>
+                            <a href="/home" class="subnav__category">Hornos Empotrables</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Lavado y secado</a>
+                            <a href="/home" class="subnav__category">Lavadoras</a>
+                            <a href="/home" class="subnav__category">Secadoras</a>
+                            <a href="/home" class="subnav__category">Lavavajillas</a>
+                            <a href="/home" class="subnav__title">Cocinas y campanas</a>
+                            <a href="/home" class="subnav__category">Cocinas</a>
+                            <a href="/home" class="subnav__category">Campanas extractoras</a>
+                            <a href="/home" class="subnav__title">Hogar</a>
+                            <a href="/home" class="subnav__category">Aspiradoras y lustradoras</a>
+                            <a href="/home" class="subnav__category">Máquinas de coser</a>
+                            <a href="/home" class="subnav__category">Planchas</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+            <li class="nav_element">
+                <a class="nav_element-link" href="/home">salud y belleza</a>
+                <div class="nav_element-container">
+                    <div class="elements-2">
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Perfumes</a>
+                            <a href="/home" class="subnav__category">Mujer</a>
+                            <a href="/home" class="subnav__category">Hombre</a>
+                            <a href="/home" class="subnav__category">Splash y Fragancias</a>
+                            <a href="/home" class="subnav__title">Depiladoras</a>
+                            <a href="/home" class="subnav__title">Maquillaje</a>
+                            <a href="/home" class="subnav__category">Rostro</a>
+                            <a href="/home" class="subnav__category">Ojos y Cejas</a>
+                            <a href="/home" class="subnav__category">Labios</a>
+                            <a href="/home" class="subnav__category">Uñas</a>
+                            <a href="/home" class="subnav__category">Brochas, Aplicadores y Accesorios</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Afeitado</a>
+                            <a href="/home" class="subnav__category">Afeitadoras y Rasuradoras</a>
+                            <a href="/home" class="subnav__category">Recortador de Vello</a>
+                            <a href="/home" class="subnav__category">Cortador de Cabello</a>
+                            <a href="/home" class="subnav__title">Cuidado del Cabello</a>
+                            <a href="/home" class="subnav__category">Planchas</a>
+                            <a href="/home" class="subnav__category">Rizadoras</a>
+                            <a href="/home" class="subnav__category">Secadoras</a>
+                            <a href="/home" class="subnav__category">Shampoo, Acondicionadores y tratamientos</a>
+                            <a href="/home" class="subnav__category">Tintes</a>
+                            <a href="/home" class="subnav__category">Cepillos y Accesorios</a>
+                            <a href="/home" class="subnav__category">Extensiones de Cabello</a>
+                        </div>
+                        <div class="col-3">
+                            <a href="/home" class="subnav__title">Fajas</a>
+                            <a href="/home" class="subnav__title">Salud y bienestar</a>
+                            <a href="/home" class="subnav__category">Balanzas</a>
+                            <a href="/home" class="subnav__category">Cuidado Dental</a>
+                            <a href="/home" class="subnav__category">Cigarros Electrónicos</a>
+                            <a href="/home" class="subnav__title">Vitaminas y suplementos</a>
+                            <a href="/home" class="subnav__title">Bienestar Sexual</a>
+                            <a href="/home" class="subnav__title">Masaje spa</a>
+		                </div>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div id="content">
+        @content2
+    </div>
+    <script>
+        $(".nav_element").hover(function(){
+            $(".is_active").removeClass("is_active")
+            $(this).addClass("is_active")
+        },function(){
+            $(this).removeClass("is_active")
+        })
+        $("#header-menu .nav_element:nth-child(7) a").css({"width": "140px"})
+
+        $("#searchInput").keyup(function(){
+            buscarxcategoria()
+            buscarxmarca()
+            buscarxcategoriamarca()
+        })
+        $("#searchInput").focus(function(){
+            $("#searchResult").css("display","block")
+        })
+        $("body").click(function(e){
+            if(e.target!=$("#searchInput")[0] && $("#searchResult").find($(e.target)).length==0)
+                $("#searchResult").css("display","none")
+        })
+        function buscarxcategoria(){
+            var parse=$("#searchInput").val().toLowerCase()
+            $.ajax({
+                type : "POST",
+                url : "/home/buscarxcategoria",
+                async : false,
+                data : {parse:parse},
+                success:function(categorias){
+                    if($(".search-category").length==0){
+                        if(categorias.length!=0){
+                            $("#searchResult").prepend('<ul class="search-category"><div><h3>categorías</h3></div></ul>')
+                        }
+                    }
+                    if(categorias.length==0){
+                        $(".search-category").remove()
+                    }
+                    else{
+                        $(".search-category li").remove()
+                        for(var i in categorias){
+                            if(i>4)return
+                            var nombre=categorias[i].nombre.toLowerCase()
+                            $(".search-category").append('<li><a href="/categoria/'+nombre.replace(/ /g,"-")+'"><span></span></a></li>')
+                            var n=nombre.toLowerCase().indexOf(parse)
+                            var m=n+parse.length
+                            if(n==-1)n=nombre.length
+                            $(".search-category li:last-child span").append(nombre.slice(0,n))
+                            if(n!=nombre.length){
+                                $(".search-category li:last-child span").append('<span style="color: #000;text-decoration: underline;">'+
+                                    nombre.slice(n,m)+'</span>'+nombre.slice(m,nombre.length))
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        function buscarxmarca(){
+            var parse=$("#searchInput").val().toLowerCase()
+            $.ajax({
+                type : "POST",
+                url : "/home/buscarxmarca",
+                async : false,
+                data : {parse:$("#searchInput").val()},
+                success:function(marcas){
+                    if($(".search-brand").length==0){
+                        if(marcas.length!=0){
+                            if($(".search-category").length==0)$("#searchResult").prepend('<ul class="search-brand"><div><h3>marcas</h3></div></ul>')
+                            else $(".search-category").after('<ul class="search-brand"><div><h3>marcas</h3></div></ul>')
+                        }
+                    }
+                    if(marcas.length==0){
+                        $(".search-brand").remove()
+                    }
+                    else{
+                        $(".search-brand li").remove()
+                        for(var i in marcas){
+                            if(i>3)return
+                            var nombre=marcas[i].toLowerCase()
+                            $(".search-brand").append('<li><a href="/marca/'+nombre+'">'+'<span class="brand-name"></span>'+
+                                '</a></li>')
+                            var n=nombre.toLowerCase().indexOf(parse)
+                            var m=n+parse.length
+                            if(n==-1)n=nombre.length
+                            $(".search-brand li:last-child span.brand-name").append(nombre.slice(0,n))
+                            if(n!=nombre.length){
+                                $(".search-brand li:last-child span.brand-name").append('<span style="color: #000;text-decoration: underline;">'+
+                                    nombre.slice(n,m)+'</span>'+nombre.slice(m,nombre.length))
+                            }
+                        }
+                    }
+                }
+            })
+        }
+        function buscarxcategoriamarca(){
+            var parse=$("#searchInput").val().toLowerCase()
+            $.ajax({
+                type : "POST",
+                url : "/home/buscarxcategoriamarca",
+                async : false,
+                data : {parse:$("#searchInput").val()},
+                success:function(marcas){
+                    if($(".search-brand").length==0){
+                        if(marcas.length!=0){
+                            if($(".search-category").length==0)$("#searchResult").prepend('<ul class="search-brand"><div><h3>marcas</h3></div></ul>')
+                            else $(".search-category").after('<ul class="search-brand"><div><h3>marcas</h3></div></ul>')
+                        }
+                    }
+                    for(var i in marcas){
+                        if(i>4)return
+                        var nombre=marcas[i].nombre.toLowerCase()
+                        var categoria=marcas[i].categoria_nombre.toLowerCase()
+                        $(".search-brand").append('<li><a href="/marca/'+categoria.replace(/ /g,"-")+'/'+nombre+'">'+'<span class="brand-name"></span>'+' en '+
+                            '<span class="brand-category">'+categoria+'</span></a></li>')
+                        var n=nombre.toLowerCase().indexOf(parse)
+                        var m=n+parse.length
+                        if(n==-1)n=nombre.length
+                        $(".search-brand li:last-child span.brand-name").append(nombre.slice(0,n))
+                        if(n!=nombre.length){
+                            $(".search-brand li:last-child span.brand-name").append('<span style="color: #000;text-decoration: underline;">'+
+                                nombre.slice(n,m)+'</span>'+nombre.slice(m,nombre.length))
+                        }
+                    }
+                }
+            })
+        }
+    </script>
+}

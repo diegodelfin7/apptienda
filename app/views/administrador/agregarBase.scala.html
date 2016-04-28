@@ -1,0 +1,14 @@
+@(usuario: String)(content1:Html)(content2:Html)(content3:Html)(content4:Html)
+@import views.html.administrador.modulo
+@modulo(usuario){
+    @content1
+}{
+    @content2
+    > Añadir @content3
+}{
+    Añadir @content3
+}{
+
+}{
+    @content4
+}

@@ -1,0 +1,221 @@
+@(usuario: String)
+@import views.html.administrador.agregarBase
+@agregarBase(usuario){
+
+}{
+    > <a href="/admin/producto">Producto</a>
+}{
+    producto
+}{
+    <div id="producto">
+        <form id="productoForm">
+            <div class="form-group">
+                <label>Modelo</label>
+                <input type="text" id="producto_modelo" name="modelo" maxlength="100">
+            </div>
+             <div class="form-group">
+                <label>Color</label>
+                <input type="text" id="producto_color" name="color" maxlength="20">
+            </div>
+            <div class="form-group">
+                <label>Marca</label>
+                <input type="text" id="producto_marca" name="marca" maxlength="40">
+            </div>
+            <div class="form-group">
+                <label>Precio</label>
+                <input type="text" id="producto_precio" name="precio" maxlength="10">
+            </div>
+            <div class="form-group">
+                <table id="caracteristicas">
+                    <thead>
+                        <tr>
+                            <th>Caracteristicas principales</th>
+                        </tr>
+                        <tr>
+                            <th style="font-size: 11px">caracteristica</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="padd">
+                                <input type="text" name="caracteristica">
+                            </td>
+                        </tr>
+                        <tr class="add-row">
+                            <td><a href="javascript:void(0)">Agregar caracteristica adicional</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <table id="especificaciones">
+                    <thead>
+                        <tr>
+                            <th>Especificaciones</th>
+                        </tr>
+                        <tr>
+                            <th style="font-size: 11px">nombre</th>
+                            <th style="font-size: 11px">descripcion</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="padd">
+                                <input type="text" name="espNombre">
+                            </td>
+                            <td class="padd">
+                                <input type="text" name="espDescripcion">
+                            </td>
+                        </tr>
+                        <tr class="add-row">
+                            <td><a href="javascript:void(0)">Agregar especificacion adicional</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="form-group">
+                <label>Elija la categoria</label>
+                <select id="producto_cat_lista" name="categorias">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Imagen</label>
+                <input type="file" id="imagenFile" value="abrir">
+                <div class="well">
+                    <div id="draganddrop">Arrastre y suelte la imagen</div>
+                    <img id="imagen">
+                </div>
+                <input class="vButton" type="button" id="producto_plus" value="agregar">
+            </div>
+        </form>
+    </div>
+    <script>
+        $("#content>h1:first-child").css("margin-left","2em")//.css("text-align","center").css("margin-left","-10%")
+        $("#producto").css("margin-left","2em")
+        $("#producto div.form-group label").width("10em")
+        $("#producto input[type='text']").width("15em")
+        $("#caracteristicas tbody,#especificaciones tbody").click(function(e){
+            if($(e.target).is("a")){
+                var tr=$(e.target).closest("tr")
+                $(tr).not(".add-row").remove()
+            }
+        })
+        $("#caracteristicas tr.add-row a").click(function(){
+            var tr=$(this).closest("tr")
+            $(tr).before('<tr><td class="padd"><input type="text"><a class="inline-deletelink">Eliminar</a></td></tr>')
+        })
+        $("#especificaciones tr.add-row a").click(function(){
+            var tr=$(this).closest("tr")
+            $(tr).before('<tr><td class="padd"><input type="text"></td><td class="padd"><input type="text"><a class="inline-deletelink">Eliminar</a></td></tr>')
+        })
+        $("#draganddrop").on("dragenter",function(e){
+            e.stopPropagation()
+            e.preventDefault()
+            $(this).css({border:"2px solid #0B85A1"})
+        })
+        $("#draganddrop").on("dragleave",function(e){
+            e.stopPropagation()
+            e.preventDefault()
+            $(this).css({border:"2px dashed #0B85A1"})
+        })
+        var file=null
+        $("#draganddrop").on("drop",function(e){
+            e.stopPropagation()
+            e.preventDefault()
+            $(this).css({border:"2px dashed #0B85A1"})
+            //file = e.target.files[0]
+            file = e.originalEvent.dataTransfer.files[0]
+            imageType = /image.*/;
+            if (file==undefined || !file.type.match(imageType))
+                return;
+
+            var reader = new FileReader();
+            cargarImagen(reader)
+            reader.readAsDataURL(file)
+        })
+        $(document).on('dragenter dragover drop', function (e){
+            e.stopPropagation()
+            e.preventDefault()
+        })
+        $("#imagenFile").change(function(){
+            if (this.files && this.files[0]) {
+                file=this.files[0]
+                var reader = new FileReader();
+                cargarImagen(reader)
+                reader.readAsDataURL(file);
+            }
+        })
+        function cargarImagen(reader){
+            reader.onload = function (e) {
+                var parent=$("#imagen").parent();
+                $("#imagen").remove()
+                parent.append('<img id="imagen">')
+                $("#imagen").attr("src", e.target.result);
+                parent.width($("#imagen").width()>parent.width()?$("#imagen").width():$("#imagen").width()<150?150:$("#imagen").width())
+                $("#draganddrop").css({"max-width":200,"height":60,margin:"auto"})
+            }
+        }
+        $.ajax({
+            type : "POST",
+            url : "/admin/producto/ultimascategorias",
+            async : false,
+            data : {},
+            success:function(categorias){
+                $("#producto_cat_lista").text("")
+                for(var i in categorias){
+                    var categoria=categorias[i]
+                    $("#producto_cat_lista").append('<option value="'+categoria.id+'">'+categoria.nombre+'</option>')
+                }
+            }
+        })
+        $("#productoForm").validate({
+            rules : {modelo:{required:true},color:{required:true},marca:{required:true},precio:{required:true,number:true},
+                caracteristica:{required:true},espNombre:{required:true},espDescripcion:{required:true}},
+            errorElement:'div',
+            errorPlacement : function ( error, element ) {
+                $ (error).addClass('alert alert-danger').css({width: "17em"})
+                $(element).after(error)
+            }
+        })
+        $("#producto_plus").click(function(){
+            if(!$("#productoForm").valid())return false
+            if($("#producto_cat_lista").val()==null){
+                $("#producto_plus").next("div").remove()
+                $("#producto_plus").after('<div class="alert alert-danger">Primero debe crear una categoria</div>')
+                return false
+            }
+            var caracteristicas=""
+            $("#caracteristicas tbody tr:not('.add-row')").each(function(){
+                val=$(this).find("input").val()
+                if(val!="")caracteristicas+=val+","
+            })
+            caracteristicas=caracteristicas.slice(0,caracteristicas.length-1)
+            var especificaciones=""
+            $("#especificaciones tbody tr:not('.add-row')").each(function(){
+                nombre=$(this).find("td:nth-child(1) input").val()
+                descripcion=$(this).find("td:nth-child(2) input").val()
+                if(nombre!="" && descripcion!="")especificaciones+=nombre+":"+descripcion+","
+            })
+            especificaciones=especificaciones.slice(0,especificaciones.length-1)
+            function FileName(file){
+                if(file==null)return ""
+                else if('name' in file)return file.name
+                else if('value' in file)return file.value
+            }
+            var dataurl=$("#imagen").attr("src")==undefined?"":$("#imagen").attr("src")
+            $.ajax({
+                type : "POST",
+                url : "/admin/producto/agregar",
+                async : false,
+                data : {modelo:$("#producto_modelo").val(),color:$("#producto_color").val(),
+                    marca:$("#producto_marca").val(),precio:$("#producto_precio").val(),categoria_id:$("#producto_cat_lista").val(),
+                    caracteristicas:caracteristicas,especificaciones:especificaciones,dataurl:dataurl,image:FileName(file)},
+                success:function(producto){
+                    $("#content h1:first-child").prev("div.alert").remove()
+                    $("#content h1:first-child").before('<div class="alert alert-success">Se agrego un producto '+producto.categoria_nombre+'</div>')
+                    setTimeout(function(){location.href = "/admin/producto"},1000)
+                }
+            })/**/
+        })
+    </script>
+}

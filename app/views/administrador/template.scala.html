@@ -1,0 +1,59 @@
+@(usuario: String)(content1: Html)(content2: Html)(content3: Html)(content4: Html)(content5: Html)
+@main("Administrador"){
+    <style>
+        #header {
+            width: 100%;
+            background: #417690;
+            color: #ffc;
+            overflow: hidden;
+        }
+        #branding {
+            float: left;
+        }
+        #branding h1, #branding h1 a:link, #branding h1 a:visited {
+            color: #f4f379;
+        }
+        #branding h1 {
+            padding: 0 10px;
+            font-size: 18px;
+            margin: 8px 0;
+            font-weight: normal;
+        }
+        #user-tools {
+            float: right;
+            padding: 1.2em 10px;
+            font-size: 11px;
+            text-align: right;
+        }
+        #user-tools a:hover {
+            text-decoration: underline
+        }
+        #header a:link, #header a:visited {
+            color: #fff;
+        }
+        #content {
+            margin: 10px 15px;
+        }
+    </style>
+    @content1
+    <div id="header">
+        <div id="branding">
+            <h1 id="site-name">
+                <a href="/admin">Administrador xD</a>
+            </h1>
+        </div>
+        <div id="user-tools">
+            Bienvenido/a,<strong>@usuario. </strong><a href="/admin/logout">Cerrar sesión</a>
+        </div>
+    </div>
+    @content2
+    <div id="content">
+        <h1>@content3</h1>
+        <div id="content-main">
+            @content4
+            @content5
+        </div>
+    </div>
+    <div id="footer">
+    </div>
+}

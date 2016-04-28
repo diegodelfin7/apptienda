@@ -1,0 +1,9 @@
+2016-04-27 23:57:35,293 - [INFO] - from play in pool-4-thread-6 
+Listening for HTTP on /0:0:0:0:0:0:0:0:9000
+
+2016-04-27 23:57:40,896 - [INFO] - from play in play-internal-execution-context-1 
+database [default] connected at jdbc:mysql://localhost/tienda
+
+2016-04-27 23:57:42,583 - [INFO] - from play in play-internal-execution-context-1 
+Application started (Dev)
+

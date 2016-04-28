@@ -1,0 +1,122 @@
+@(message: String,cliente: Cliente)
+@import views.html.tienda.template
+@template(message,cliente){
+    <style>
+        h3 {
+            color: #333;
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-weight: normal;
+            line-height: 1.1em;
+            text-transform: uppercase;
+            margin: 16px 0;
+        }
+        #content #createAccount .ui-formRow {
+            float: left;
+            margin: 10px;
+            position: relative;
+            width: 440px;
+        }
+        #form-account-create .button {
+            margin-top: 20px;
+            width: 150px;
+            position: relative;
+            left: -320px;
+        }
+    </style>
+}{
+    <div id="createAccount">
+        @if(cliente==null){<h3>Crear una nueva cuenta</h3>}else{<h3>Editar cuenta</h3>}
+        <div>
+            <form id="form-account-create" @if(cliente==null){action="/cliente/registro"}else{action="/cliente/editar"} method="post">
+                <fieldset class="ui-fieldset">
+                    <div class="ui-formRow">
+                        <label>Email</label>
+                        <div>
+                            <input type="text" id="email" name="email" @if(cliente!=null){value="@{Cuenta.find.byId(cliente.cuenta.id).usuario}" disabled="disabled"} maxlength="30">
+                        </div>
+                    </div>
+                    <div class="ui-formRow">
+                        <label>Contraseña</label>
+                        <div>
+                            <input type="password" id="password" name="password" @if(cliente!=null){value="@{Cuenta.find.byId(cliente.cuenta.id).clave}"} maxlength="30">
+                        </div>
+                    </div>
+                    <div class="ui-formRow">
+                        <label>Confirmar contraseña</label>
+                        <div>
+                            <input type="password" id="repassword" name="repassword" @if(cliente!=null){value="@{Cuenta.find.byId(cliente.cuenta.id).clave}"} maxlength="30">
+                        </div>
+                    </div>
+                    <div class="ui-formRow">
+                        <label>Nombre(s)</label>
+                        <div>
+                            <input type="text" id="nombre" name="nombre" @if(cliente!=null){value="@{cliente.nombre}"} maxlength="30">
+                        </div>
+                    </div>
+                    <div class="ui-formRow">
+                        <label>Apellido Paterno</label>
+                        <div>
+                            <input type="text" id="paterno" name="paterno" @if(cliente!=null){value="@{cliente.paterno}"} maxlength="20">
+                        </div>
+                    </div>
+                    <div class="ui-formRow">
+                        <label>Apellido Materno</label>
+                        <div>
+                            <input type="text" id="materno" name="materno" @if(cliente!=null){value="@{cliente.materno}"} maxlength="20">
+                        </div>
+                    </div>
+                    <div class="ui-formRow" style="width: 100%;margin-bottom: -10px">
+                        <label>Número de identificación</label>
+                    </div>
+                    <div class="ui-formRow">
+                        <label>DNI (para personas y organizaciones)</label>
+                        <div>
+                            <input type="text" id="dni" name="dni" @if(cliente!=null){value="@{cliente.dni}"} maxlength="8">
+                        </div>
+                    </div>
+                    <div class="ui-formRow">
+                        <label>RUC (solo para organizaciones)</label>
+                        <div>
+                            <input type="text" id="ruc" name="ruc" @if(cliente!=null){value="@{cliente.ruc}"} maxlength="11">
+                        </div>
+                    </div>
+                    <input class="button" @if(cliente==null){id="registrar" value="Registrar"}else{id="editar" value="Editar"} type="button">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <script>
+        $.validator.addMethod(
+            "existeEmail",
+            function(value,element,params) {
+                var error="";
+                if(params==true){
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "/cliente/existecuenta",
+                        data: {usuario:value},
+                        success: function(msg){
+                            error=msg
+                        }
+                    })
+                }
+                if(error!="")$.validator.messages.existeEmail=error
+                return error=="";
+            }
+        )
+        $("#form-account-create").validate({
+            rules : {email:{required:true,email:true},password:{required:true},repassword:{required:true,equalTo:"#password"},
+            nombre:{required:true},paterno:{required:true},materno:{required:true}},
+            errorElement:'div',
+            errorPlacement : function ( error, element ) {
+                $ (error).addClass('alert alert-danger').css({width: "60%","font-size": "1.3rem"})
+                $(element).after(error)
+            }
+        })
+        $("#registrar,#editar").click(function(){
+            if(!$("#form-account-create").valid())return false
+            else $("#form-account-create").submit()
+        })
+    </script>
+}

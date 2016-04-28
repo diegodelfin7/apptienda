@@ -1,0 +1,311 @@
+@(message: String,cliente: Cliente)
+@import views.html.tienda.template
+@template(message,cliente){
+    <style>
+        .empty-cart {
+            background: transparent url(/assets/images/empty_cart.png) no-repeat 180px 0;
+            margin: 0 auto;
+            min-height: 100px;
+            width: 940px;
+            color: #7f7f7f;
+        }
+        .empty-cart a:link {
+            color: #4386A1;
+            text-decoration: underline;
+        }
+        .empty-cart p:first-child {
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-size: 24px;
+            margin: 0 0 0 300px;
+            padding: 0;
+            text-transform: uppercase;
+        }
+        .empty-cart p:last-child {
+            font-size: 16px;
+            margin: 10px 0 0 300px;
+        }
+        .title-cart {
+            color: #333;
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-weight: normal;
+            line-height: 1.1em;
+            text-transform: uppercase;
+            font-size: 28px;
+            font-weight: 100;
+        }
+        table.table-product-cart {
+            color: #7f7f7f;
+            margin:auto;
+            margin-top:30px;
+            width: 700px;
+        }
+        table.table-product-cart th.name-product {
+            width: 10px;
+        }
+        table.table-product-cart th.description-product {
+            width: 250px;
+        }
+        table.table-product-cart thead th {
+            font-size: 14px;
+            font-size: 1.4rem;
+            font-weight: 100;
+            padding: 5px;
+        }
+        table.table-product-cart thead th, thead td {
+            background-color: #4c4c4c;
+            background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0%,#4c4c4c),color-stop(100%,#333));
+            background-image: -webkit-linear-gradient(top,#4c4c4c,#333);
+            background-image: -moz-linear-gradient(top,#4c4c4c,#333);
+            background-image: -ms-linear-gradient(top,#4c4c4c,#333);
+            background-image: -o-linear-gradient(top,#4c4c4c,#333);
+            background-image: linear-gradient(top,#4c4c4c,#333);
+            color: #fff;
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-size: 14px;
+            font-size: 1.4rem;
+            font-weight: normal;
+            text-align: left;
+            text-transform: uppercase;
+        }
+        table.table-product-cart tbody td {
+            font-size: 13px;
+            font-size: 1.3rem;
+            font-weight: 100;
+            line-height: 20px;
+            padding: 10px 5px 5px;
+            vertical-align: top;
+            border-bottom: dotted 1px #ccc;
+        }
+        li.cart-item-name, li.cart-item-brand, li.cart-item-sku {
+            line-height: 1.3rem;
+            line-height: 16px;
+        }
+        table.table-product-cart td span.cart_last_price {
+            text-decoration: line-through;
+            font-size: 10px;
+            color: gray;
+        }
+        table.table-product-cart td span.cart_discount {
+            color: red;
+        }
+        table.table-product-cart th.delete-product-element {
+            width: 20px;
+        }
+        .delete-product {
+            background: url(/assets/images/iconset.png) 0 -80px;
+            display: block;
+            overflow: hidden;
+            text-align: left;
+            text-indent: -9999px;
+            height: 20px;
+            width: 20px;
+        }
+        div#cart-cms-help {
+            width: 520px;
+            height: 71px;
+            float: left;
+        }
+        div#payment-product-cart {
+            display: block;
+            float: left;
+            width: 300px;
+        }
+        .payment-product-cart {
+            border-left: 1px dotted #ccc;
+            border-bottom: 1px dotted #ccc;
+            color: #000;
+            margin-bottom: 0;
+            width: 300px;
+        }
+        div#payment-product-cart th {
+            padding: 10px;
+            text-align: right;
+            width: 210px;
+            font: 13px/15px Tahoma,Arial,sans-serif;
+        }
+        #button-checkout.button {
+            height: 39px;
+            margin-right: 120px;
+            margin-top: 10px;
+        }
+        #button-checkout.button:hover{
+            background-color: #75bff4 ;
+            background-image:none;
+        }
+        #button-checkout.button:after {
+            top: 12px;
+            background: url(/assets/images/iconset.png) 0 -60px;
+            content: '';
+            display: block;
+            height: 20px;
+            left: 5px;
+            position: absolute;
+            width: 20px;
+        }
+        #button-checkout.button span {
+            display: block;
+            font-size: 2rem;
+            margin-top: 7px;
+        }
+    </style>
+}{
+    <script>
+        if(typeof(localStorage)!=="undefined"){
+            //console.log(localStorage.carrito)
+            if(localStorage.carrito==undefined || localStorage.carrito==""){
+                $("#content").append('<h1 style="margin: 60px auto .5em;" class="title-cart">Carrito de compras</h1>'+
+                '<div class="empty-cart">'+
+                    '<p>Tu carrito de compras está vacío</p>'+
+                    '<p>Click <a href="/home">aquí</a> para retornar al catálogo.</p>'+
+                '</div>')
+            }
+            else{
+                $("#content").append('<table class="table-product-cart">'+
+                '<thead>'+
+                '<tr>'+
+                    '<th class="name-product" scope="col">Producto</th>'+
+                    '<th class="description-product"></th>'+
+                    '<th class="price-product">Precio</th>'+
+                    '<th class="price-product">Cantidad</th>'+
+                    '<th class="price-product">Subtotal</th>'+
+                    '<th class="delete-product-element"></th>'+
+                '</tr>'+
+                '</thead>'+
+                '<tbody>'+
+                '</tbody></table>')
+                for(var i in localStorage.carrito.split(",")){
+                    var id=localStorage.carrito.split(",")[i].split(":")[0]
+                    var cant=localStorage.carrito.split(",")[i].split(":")[1]
+                     $.ajax({
+                        type : "POST",
+                        url : "/home/producto/ver",
+                        async : false,
+                        data : {id:id},
+                        success:function(producto){
+                            price=""
+                            if(producto.descuento==0){
+                                price='<span data-price='+producto.precio+' class="cart_special_price">S/. '+producto.precio+'</span><br>'
+                            }
+                            else{
+                                price='<span data-price='+producto.precio_actual+' class="cart_special_price">S/. '+producto.precio_actual+'</span><br>'+
+                                    '<span class="cart_last_price">S/. '+producto.precio+'</span><br>'+
+                                    '<span class="cart_discount">Descuento '+producto.descuento+'%</span>'
+                            }
+                            cantidad='<div class="mount"><select title="Cantidad">'
+                            for(var j=1;j<=Math.max(cant,6);j++){
+                                cantidad+='<option '+(j==cant?'selected':'')+'>'+j+'</option>'
+                            }
+                            cantidad+='</select></div>'
+                            $(".table-product-cart").append('<tr data-id="'+id+'">'+
+                                '<th>'+
+                                    '<a title="'+producto.modelo+'"><img width=77 src="/assets/productos/'+producto.image+'">'+'</a>'+
+                                '</th>'+
+                                '<td>'+
+                                    '<ul>'+
+                                        '<li class="cart-item-name"><b>'+producto.modelo+'-'+producto.color+'</b></li>'+
+                                        '<li class="cart-item-brand">'+producto.marca+'</li>'+
+                                        '<li class="cart-item-sku">'+
+                                            '<b style="display:inline;">SKU:</b>'+
+                                            '<span style="font-size: 0.9em;">'+producto.especificaciones.split(",")[0].split(":")[1]+'</span>'+
+                                            '<div><br><b>Producto agregado</b></div>'+
+                                        '</li>'+
+                                    '</ul>'+
+                                '</td>'+
+                                '<td>'+price+'</td>'+
+                                '<td>'+cantidad+'</td>'+
+                                '<td><span class="cart_subtotal"><span></td>'+
+                                '<td><a class="delete-product" title="Eliminar del carrito">Quitar objeto</a></td>'+
+                            '</tr>')
+                        }
+                     })
+                }
+                var total=0
+                $("#content").append('<div id="cart-cms-help"></div>'+
+                    '<div id="payment-product-cart">'+
+                    '<table class="payment-product-cart">'+
+                        '<tbody>'+
+                            '<tr>'+
+                                '<th scope="row">Subtotal</th>'+
+                                '<td><strong>S/. '+total+'</strong></td>'+
+                            '</tr>'+
+                            '<tr>'+
+                                '<th scope="row">Un solo pago de</th>'+
+                                '<td><b>S/. '+total+'</b></td>'+
+                            '</tr>'+
+                        '</tbody>'+
+                    '</table>'+'</div>')
+                $(".table-product-cart .mount select").change(function(){
+                    var price=parseFloat($(this).closest("td").prev().find(".cart_special_price").attr("data-price"))
+                    var subtotal=parseDouble(price*$(this).val())
+                    $(this).closest("td").next().find("span").text('S/. '+subtotal)
+                    $(this).closest("td").next().find("span").attr("data-subtotal",subtotal)
+                    incCantCarrito($(this).closest("tr").attr("data-id"),$(this).val())
+                    actualizarSubTotal()
+                })
+                $(".table-product-cart .mount select").change()
+                $(".table-product-cart .delete-product").click(function(){
+                    remProdCarrito($(this).closest("tr").attr("data-id"))
+                    $(this).closest("tr").remove()
+                    actualizarSubTotal()
+                    if($(".table-product-cart tbody tr").length==0){
+                        $(".table-product-cart").remove()
+                        $("#cart-cms-help").remove()
+                        $("#payment-product-cart").remove()
+                        //$("#button-checkout").remove()
+                        $("#content").append('<h1 style="margin: 60px auto .5em;" class="title-cart">Carrito de compras</h1>'+
+                            '<div class="empty-cart">'+
+                                '<p>Tu carrito de compras está vacío</p>'+
+                                '<p>Click <a href="/home">aquí</a> para retornar al catálogo.</p>'+
+                            '</div>')
+                    }
+                })
+                function parseDouble(numero){
+                    return parseFloat(numero).toFixed(2)
+                }
+                function actualizarSubTotal(){
+                    total=0
+                    $(".table-product-cart tr .cart_subtotal").each(function(){
+                        total+=parseFloat($(this).attr("data-subtotal"))
+                    })
+                    total=parseDouble(total)
+                    $(".payment-product-cart td strong,.payment-product-cart td b").text("S/. "+total)
+                    items=0
+                    $(".table-product-cart .mount select").each(function(){
+                        items+=parseInt($(this).val())        
+                    })
+                    $(".user-nav-cart-items").text(items)
+                    $(".user-nav-cart-grand-total").text("S/. "+total)
+                }
+                function incCantCarrito(id,cantidad){
+                    var carrito=""
+                    for(var i in localStorage.carrito.split(",")){
+                        var ID=localStorage.carrito.split(",")[i].split(":")[0]
+                        var cant=localStorage.carrito.split(",")[i].split(":")[1]
+                        if(ID==id){
+                            carrito+=ID+":"+cantidad+","
+                        }
+                        else{
+                            carrito+=localStorage.carrito.split(",")[i]+","
+                        }
+                    }
+                    localStorage.carrito=carrito.substring(0,carrito.length-1)
+                }
+                function remProdCarrito(id){
+                    var carrito=""
+                    for(var i in localStorage.carrito.split(",")){
+                        var ID=localStorage.carrito.split(",")[i].split(":")[0]
+                        if(ID==id){
+                            carrito+=""
+                        }
+                        else{
+                            carrito+=localStorage.carrito.split(",")[i]+","
+                        }
+                    }
+                    localStorage.carrito=carrito.substring(0,carrito.length-1)
+                }
+                //$("#content").append('<a id="button-checkout" class="button second-btn">'+
+                //    '<span>Pagar</span></a>')
+            }
+        }
+    </script>
+}

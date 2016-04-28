@@ -1,0 +1,50 @@
+@(message: String)
+@import views.html.tienda.template
+@template(message,null){
+    <style>
+        h3 {
+            color: #333;
+            font-family: "function-pro",Helvetiva,Arial,sans-serif;
+            font-weight: normal;
+            line-height: 1.1em;
+            text-transform: uppercase;
+            margin: 16px 0;
+        }
+        .alert {
+            font-size: 1.5rem;
+            width: 70%;
+            margin-top: 20px;
+        }
+    </style>
+}{
+    <div class="unit">
+        <h3>cliente nuevo</h3>
+        <p class="newcustomer">le invitamos a registrarse como nuevo cliente</p>
+        <a class="button" href="/cliente/registro">Continuar</a>
+    </div>
+    <div class="unit lastUnit">
+        <h3>clientes registrados</h3>
+        <form id="form-account-login" action="/home/login" method="post">
+            <fieldset class="ui-fieldset">
+                <div class="ui-formRow">
+                    <label>Email</label>
+                    <div>
+                        <input type="text" id="email" name="email" maxlength="70">
+                    </div>
+                </div>
+                <div class="ui-formRow">
+                    <label>Contraseña</label>
+                    <div>
+                        <input type="password" id="clave" name="clave" maxlength="70">
+                    </div>
+                </div>
+                @if(flash.contains("type")){
+                    <div class="alert alert-@{flash.get("type")}">
+                    @flash.get(flash.get("type"))
+                    </div>
+                }
+            </fieldset>
+            <input class="button" type="submit" value="iniciar sesión">
+        </form>
+    </div>
+}

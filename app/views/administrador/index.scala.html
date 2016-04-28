@@ -1,0 +1,60 @@
+@(usuario: String)
+@import views.html.administrador.template
+@template(usuario){
+    <style>
+        .module{
+            border: 1px solid #ccc;
+            margin-bottom: 5px;
+        }
+        .module caption{
+            margin: 0;
+            padding: 2px 5px 3px 5px;
+            font-size: 11px;
+            text-align: left;
+            font-weight: bold;
+            background-color: #AEC7E1;
+            color: #fff;
+        }
+        .module table th {
+            width: 100%;
+            text-align: left;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .module td,th {
+            font-size: 11px;
+            line-height: 13px;
+            border-bottom: 1px solid #eee;
+            vertical-align: top;
+            padding: 5px;
+        }
+    </style>
+}{
+
+}{
+    Sitio
+}{
+
+}{
+    <div class="module">
+        <table id="modulos" style="width: 100%">
+            <caption>Modulos</caption>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        var modulos=["Categorias","Productos"]
+        var path=["admin/categoria","admin/producto"]
+        for(var i in modulos){
+            $("#modulos tbody").append('' +
+            '<tr>' +
+                '<th scope="row">' +
+                        '<a href="'+path[i]+'">'+modulos[i]+'</a>' +
+                    '</th>' +
+                '</tr>'
+            )
+        }
+        $(".module").parent().css("width","400px")
+    </script>
+}

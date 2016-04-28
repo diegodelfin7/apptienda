@@ -1,0 +1,84 @@
+@(usuario: String)
+@import views.html.administrador.agregarBase
+@agregarBase(usuario){
+    <style>
+
+    </style>
+}{
+    > <a href="/admin/categoria">Categorias</a>
+}{
+    categoria
+}{
+    <div id="categoria">
+        <form id="categoriaForm">
+            <div class="form-group">
+                <label>Nombre</label>
+                <input class="vTextField" type="text" id="categoria_nombre" name="nombre">
+            </div>
+            <div class="form-group">
+                <label>Elija categoria padre</label>
+                <select id="categoria_lista" name="categorias">
+                    <option value>ninguna</option>
+                </select>
+            </div>
+            <input class="vButton" type="button" id="categoria_plus" value="agregar">
+        </form>
+    </div>
+    <script>
+        $.ajax({
+            type : "POST",
+            url : "/admin/categoria/listar",
+            async : false,
+            data : {},
+            success:function(categorias){
+                $("#categoria_lista").text("")
+                $("#categoria_lista").append('<option value>ninguna</option>')
+                for(var i in categorias){
+                    var categoria=categorias[i]
+                    $("#categoria_lista").append('<option value="'+categoria.id+'">'+categoria.nombre+'</option>')
+                }
+            }
+        })
+        $.validator.addMethod(
+            "existeCat",
+            function(value,element,params) {
+                var error="";
+                if(params==true){
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: "/admin/categoria/existecategoria",
+                        data: {value:value},
+                        success: function(msg){
+                            error=msg
+                        }
+                    })
+                }
+                if(error!="")$.validator.messages.existeCat=error
+                return error=="";
+            }
+        )
+        $("#categoriaForm").validate({
+            rules : {nombre:{required:true,existeCat:true}},
+            errorElement:'div',
+            errorPlacement : function ( error, element ) {
+                $ (error).addClass('alert alert-danger').css({width: "25em"})
+                $(element).after(error)
+            }
+        })
+        $("#categoria_plus").click(function(){
+            if(!$("#categoriaForm").valid())return false
+            $.ajax({
+                type : "POST",
+                url : "/admin/categoria/agregar",
+                async : false,
+                data : {nombre:$("#categoria_nombre").val(),categoria_id:$("#categoria_lista").val()},
+                success:function(categoria){
+                    $("#content h1:first-child").prev("div.alert").remove()
+                    $("#content h1:first-child").before('<div class="alert alert-success">Se agrego la categoria '+categoria.nombre+'</div>')
+                    setTimeout(function(){location.href = "/admin/categoria"},1000)
+                }
+            })
+        })
+    </script>
+}
